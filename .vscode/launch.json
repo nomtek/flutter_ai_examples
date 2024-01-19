@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "mistral_ai_chat_example_app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file",
+                "env.env",
+            ]
+        },
+        {
+            "name": "mistral_ai_chat_example_app (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "mistral_ai_chat_example_app (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
