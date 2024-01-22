@@ -11,6 +11,7 @@ class MyApp extends HookConsumerWidget {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       routerConfig: router,
       localizationsDelegates: const [
         AppLocalizations.delegate,
