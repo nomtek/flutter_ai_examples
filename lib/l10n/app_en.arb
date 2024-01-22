@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
+  "mistralAIChatTitle": "MistralAI Chat",
+  "@mistralAIChatTitle": {
+    "description": "Title of the chat page"
   }
 }

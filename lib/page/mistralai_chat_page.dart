@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:mistral_ai_chat_example_app/l10n/l10n.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -26,7 +27,9 @@ class MistralAIChatPage extends HookConsumerWidget {
     final modelNames = ref.watch(modelNamesProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mistral AI Chat')),
+      appBar: AppBar(
+        title: Text(context.l10n.mistralAIChatTitle),
+      ),
       body: Center(
         child: Column(
           children: [
