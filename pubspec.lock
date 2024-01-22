@@ -415,8 +415,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "19-prepare-the-project-for-release-to-pubdev"
-      resolved-ref: f370c7f2828b86c75ca07b8e16813cc6385d5344
+      ref: "0.0.1"
+      resolved-ref: "0f8e94011601366b3e364658fac91c3f967ee36e"
       url: "https://github.com/nomtek/mistralai_client_dart"
     source: git
     version: "0.0.1"
