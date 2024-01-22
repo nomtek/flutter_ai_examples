@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'app.dart';
+part of 'mistralai_chat_page.dart';
 
 // **************************************************************************
 // RiverpodGenerator
