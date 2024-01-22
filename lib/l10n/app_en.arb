@@ -3,5 +3,9 @@
   "mistralAIChatTitle": "MistralAI Chat",
   "@mistralAIChatTitle": {
     "description": "Title of the chat page"
+  },
+  "chatMessageInputHint": "Type your message here...",
+  "@chatMessageInputHint": {
+    "description": "Hint text for the chat message input field"
   }
 }
