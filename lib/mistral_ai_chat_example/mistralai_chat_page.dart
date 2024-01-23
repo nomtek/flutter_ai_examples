@@ -1,37 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:mistral_ai_chat_example_app/l10n/l10n.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'mistralai_chat_page.g.dart';
+String mistralAIApiKey() => const String.fromEnvironment('MISTRAL_AI_API_KEY');
 
-@riverpod
-String mistralAIApiKey(MistralAIApiKeyRef ref) =>
-    const String.fromEnvironment('MISTRAL_AI_API_KEY');
+MistralAIClient mistralAIClient() => MistralAIClient(apiKey: mistralAIApiKey());
 
-@riverpod
-MistralAIClient mistralAIClient(MistralAIClientRef ref) =>
-    MistralAIClient(apiKey: ref.watch(mistralAIApiKeyProvider));
-
-@riverpod
-Future<List<String>> modelNames(ModelNamesRef ref) async {
-  final client = ref.watch(mistralAIClientProvider);
+Future<List<String>> modelNames() async {
+  final client = mistralAIClient();
   return (await client.listModels()).data.map((e) => e.id).toList();
 }
 
-class MistralAIChatPage extends HookConsumerWidget {
+class MistralAIChatPage extends StatelessWidget {
   const MistralAIChatPage({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final chatHistory = useState(ChatHistory(items: []));
-    final messageController = useTextEditingController();
+  Widget build(BuildContext context) {
+    var chatHistory = ChatHistory(items: []);
+    final messageController = TextEditingController();
 
     void addChatHistoryItem(ChatHistoryItem item) {
-      chatHistory.value = ChatHistory(
+      chatHistory = ChatHistory(
         items: [
-          ...chatHistory.value.items,
+          ...chatHistory.items,
           item,
         ],
       );
@@ -47,9 +38,9 @@ class MistralAIChatPage extends HookConsumerWidget {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: chatHistory.value.items.length,
+                itemCount: chatHistory.items.length,
                 itemBuilder: (context, index) {
-                  final item = chatHistory.value.items[index];
+                  final item = chatHistory.items[index];
                   return ListTile(
                     leading: item.isUserMessage
                         ? const Icon(Icons.person)
