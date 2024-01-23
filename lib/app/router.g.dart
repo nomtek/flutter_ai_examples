@@ -18,6 +18,10 @@ RouteBase get $homeRoute => GoRouteData.$route(
           path: 'mistralai-chat',
           factory: $MistralAIChatRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'mistralai-summary',
+          factory: $MistralAISummaryRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -56,23 +60,20 @@ extension $MistralAIChatRouteExtension on MistralAIChatRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-// **************************************************************************
-// RiverpodGenerator
-// **************************************************************************
+extension $MistralAISummaryRouteExtension on MistralAISummaryRoute {
+  static MistralAISummaryRoute _fromState(GoRouterState state) =>
+      const MistralAISummaryRoute();
 
-String _$routerHash() => r'6e0e8cc72835418fa80604eaeec9f9445786c67b';
+  String get location => GoRouteData.$location(
+        '/mistralai-summary',
+      );
 
-/// See also [router].
-@ProviderFor(router)
-final routerProvider = AutoDisposeProvider<GoRouter>.internal(
-  router,
-  name: r'routerProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$routerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+  void go(BuildContext context) => context.go(location);
 
-typedef RouterRef = AutoDisposeProviderRef<GoRouter>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}

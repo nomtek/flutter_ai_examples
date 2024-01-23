@@ -1,36 +1,26 @@
 name: mistral_ai_chat_example_app
 description: "Example app showcasing the Mistral AI chat client app."
-publish_to: 'none'
+publish_to: "none"
 
-version: 1.0.0+1
+version: 0.0.1+1
 
 environment:
-  sdk: '>=3.2.3 <4.0.0'
+  sdk: ">=3.2.3 <4.0.0"
   flutter: ^3.16.0
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_hooks: ^0.20.4
   flutter_localizations:
     sdk: flutter
   go_router: ^13.0.1
-  hooks_riverpod: ^2.4.9
   intl: any
-  mistralai_client_dart:
-    git:
-      url: https://github.com/nomtek/mistralai_client_dart
-      ref: 0.0.1
-  riverpod_annotation: ^2.3.3
-
+  mistralai_client_dart: 0.0.2
 dev_dependencies:
   build_runner: ^2.4.8
-  custom_lint: ^0.5.8
   flutter_test:
     sdk: flutter
   go_router_builder: ^2.4.1
-  riverpod_generator: ^2.3.9
-  riverpod_lint: ^2.3.7
   test: ^1.24.9
   very_good_analysis: ^5.1.0
 
