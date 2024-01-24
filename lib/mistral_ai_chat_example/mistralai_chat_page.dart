@@ -1,39 +1,38 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:collection';
 
+import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/l10n/l10n.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_chat_example/chat.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 import 'package:provider/provider.dart';
 
-// TODO(lgawron): think of some loading indicator
-// TODO(lgawron): think of some error handling
-// TODO(lgawron): add some tests
-
-
-const String mistralAIApiKey = String.fromEnvironment('MISTRAL_AI_API_KEY');
-
-final mistralAIClient = MistralAIClient(apiKey: mistralAIApiKey);
+part 'chat_model.dart';
+part 'mistral_client.dart';
 
 class MistralAIChatPage extends StatelessWidget {
   const MistralAIChatPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SelectionArea(
       child: ChangeNotifierProvider(
-        create: (context) => ChatModel(mistralAIClient),
+        create: (context) => _ChatModel(mistralAIClient),
         child: Scaffold(
           appBar: AppBar(
-            title: Text(context.l10n.mistralAIChatTitle),
+            title: const Text('MistralAI Chat'),
+            actions: const [
+              _ChatSettingsButton(),
+            ],
           ),
           body: const SafeArea(
             child: Column(
               children: [
                 Expanded(
-                  child: ChatMessagesList(),
+                  child: _ChatMessagesList(),
                 ),
                 Padding(
                   padding: EdgeInsets.all(16),
-                  child: ChatMessageInput(),
+                  child: _ChatMessageInput(),
                 ),
               ],
             ),
@@ -44,14 +43,72 @@ class MistralAIChatPage extends StatelessWidget {
   }
 }
 
-class ChatMessageInput extends StatefulWidget {
-  const ChatMessageInput({super.key});
+// opens bottom sheet with chat settings
+class _ChatSettingsButton extends StatelessWidget {
+  const _ChatSettingsButton();
 
   @override
-  State<ChatMessageInput> createState() => _ChatMessageInputState();
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.settings),
+      onPressed: () {
+        final chatModel = context.read<_ChatModel>();
+        _showSettingsBottomSheet(context, chatModel);
+      },
+    );
+  }
+
+  Future<void> _showSettingsBottomSheet(
+    BuildContext context,
+    _ChatModel chatModel,
+  ) {
+    return showModalBottomSheet<void>(
+      context: context,
+      clipBehavior: Clip.antiAlias,
+      builder: (context) {
+        return ChangeNotifierProvider.value(
+          value: chatModel,
+          child: const SizedBox(
+            height: 200,
+            child: Column(
+              children: [
+                SizedBox(height: 8),
+                _StreamingModeSwitch(),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
-class _ChatMessageInputState extends State<ChatMessageInput> {
+// changes if the chat should be in streaming mode
+class _StreamingModeSwitch extends StatelessWidget {
+  const _StreamingModeSwitch();
+
+  @override
+  Widget build(BuildContext context) {
+    final isStreaming = context.select((_ChatModel model) => model.streaming);
+    return SwitchListTile(
+      title: const Text('Streaming mode'),
+      value: isStreaming,
+      onChanged: (value) {
+        context.read<_ChatModel>().streaming = value;
+      },
+    );
+  }
+}
+
+// input field where user can type message to chat
+class _ChatMessageInput extends StatefulWidget {
+  const _ChatMessageInput();
+
+  @override
+  State<_ChatMessageInput> createState() => _ChatMessageInputState();
+}
+
+class _ChatMessageInputState extends State<_ChatMessageInput> {
   late final TextEditingController messageController;
   late final FocusNode focusNode;
 
@@ -71,44 +128,68 @@ class _ChatMessageInputState extends State<ChatMessageInput> {
 
   @override
   Widget build(BuildContext context) {
+    final showLoading = context.select(
+      (_ChatModel model) => model.waitingForResponse,
+    );
     return TextField(
       focusNode: focusNode,
       textInputAction: TextInputAction.send,
       controller: messageController,
       decoration: InputDecoration(
         hintText: context.l10n.chatMessageInputHint,
-        suffixIcon: IconButton(
-          icon: const Icon(Icons.send),
-          onPressed: () => addMessage(context, messageController.text),
-        ),
+        suffixIcon: showLoading
+            ? const _TextFieldProgressIndicator()
+            : IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () => addMessage(context, messageController.text),
+              ),
       ),
       onSubmitted: (value) => addMessage(context, value),
     );
   }
 
   void addMessage(BuildContext context, String message) {
-    final historyItem = ChatHistoryItem(
-      message: message,
-      isUserMessage: true,
-    );
-    context.read<ChatModel>().add(historyItem);
+    final chatModel = context.read<_ChatModel>();
+    final canAddMessage = !chatModel.waitingForResponse;
+    if (!canAddMessage) {
+      // skip adding new message if there is generation in progress
+      return;
+    }
+    chatModel.add(_ChatHistoryItem.userMessage(message));
     messageController.clear();
+    // focus on input field because clearing input field removes focus
+    // we want to be able to type next message without clicking on input field
     focusNode.requestFocus();
   }
 }
 
-class ChatMessagesList extends StatefulWidget {
-  const ChatMessagesList({super.key});
+// progress indicator for text field
+class _TextFieldProgressIndicator extends StatelessWidget {
+  const _TextFieldProgressIndicator();
 
   @override
-  State<ChatMessagesList> createState() => _ChatMessagesListState();
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: const CircularProgressIndicator(),
+    );
+  }
 }
 
-class _ChatMessagesListState extends State<ChatMessagesList> {
-  ScrollController _scrollController = ScrollController();
+// list of chat messages
+class _ChatMessagesList extends StatefulWidget {
+  const _ChatMessagesList();
 
-  void _scrollToBottom() {
+  @override
+  State<_ChatMessagesList> createState() => _ChatMessagesListState();
+}
+
+class _ChatMessagesListState extends State<_ChatMessagesList> {
+  final ScrollController _scrollController = ScrollController();
+
+  void _scrollToBottomAfterBuild() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) return;
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 300),
@@ -117,56 +198,54 @@ class _ChatMessagesListState extends State<ChatMessagesList> {
     });
   }
 
-  void _scrollListener() {
-    debugPrint('scrollListener');
-    debugPrint('scrollController.offset: ${_scrollController.offset}');
-    debugPrint(
-        'scrollController.position.maxScrollExtent: ${_scrollController.position.maxScrollExtent}');
-  }
-
   @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_scrollListener);
+  Widget build(BuildContext context) {
+    final chatHistory = context.select(
+      (_ChatModel model) => model.chatHistory,
+    );
+
+    // schedule scroll to bottom after build
+    _scrollToBottomAfterBuild();
+
+    return ListView.builder(
+      controller: _scrollController,
+      itemCount: chatHistory.length,
+      itemBuilder: (context, index) {
+        final item = chatHistory[index];
+        return _ChatHistoryListTile(item: item);
+      },
+    );
   }
 
   @override
   void dispose() {
-    _scrollController
-      ..removeListener(_scrollListener)
-      ..dispose();
+    _scrollController.dispose();
     super.dispose();
   }
+}
+
+// list tile for chat history item. 
+// displays message from user or chat.
+class _ChatHistoryListTile extends StatelessWidget {
+  const _ChatHistoryListTile({required this.item});
+
+  final _ChatHistoryItem item;
 
   @override
   Widget build(BuildContext context) {
-    final chatHistory =
-        context.select((ChatModel model) => model.value.chatHistory);
+    final colorScheme = Theme.of(context).colorScheme;
+    final tileColor = item.isUserMessage
+        ? colorScheme.secondaryContainer
+        : colorScheme.background;
+    final iconData = item.isUserMessage ? Icons.person : Icons.computer;
+    final username = item.isUserMessage ? 'You' : 'Chat';
 
-    _scrollToBottom();
-
-    return ListView.builder(
-      controller: _scrollController,
-      itemCount: chatHistory.items.length,
-      itemBuilder: (context, index) {
-        final item = chatHistory.items[index];
-        return Container(
-          color: item.isUserMessage ? Colors.grey[200] : Colors.white,
-          child: ListTile(
-            isThreeLine: true,
-            leading: item.isUserMessage
-                ? const Icon(Icons.person)
-                : const Icon(Icons.computer),
-            title: Text(
-              item.isUserMessage ? 'you' : 'chat',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            subtitle: Text(item.message),
-          ),
-        );
-      },
+    return ListTile(
+      tileColor: tileColor,
+      isThreeLine: true,
+      leading: Icon(iconData),
+      title: Text(username),
+      subtitle: Text(item.message),
     );
   }
 }
