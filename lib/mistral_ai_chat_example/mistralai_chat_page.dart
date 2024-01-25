@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_chat_example/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 import 'package:provider/provider.dart';
 
 part 'chat_model.dart';
-part 'mistral_client.dart';
 
 class MistralAIChatPage extends StatelessWidget {
   const MistralAIChatPage({super.key});
@@ -223,7 +223,7 @@ class _ChatMessagesListState extends State<_ChatMessagesList> {
   }
 }
 
-// list tile for chat history item. 
+// list tile for chat history item.
 // displays message from user or chat.
 class _ChatHistoryListTile extends StatelessWidget {
   const _ChatHistoryListTile({required this.item});
