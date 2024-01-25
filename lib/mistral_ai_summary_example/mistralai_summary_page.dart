@@ -81,57 +81,54 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextField(
-                  decoration: const InputDecoration(
-                    labelText: 'Enter text to summarize',
+          child: ListView(
+            children: <Widget>[
+              TextField(
+                decoration: const InputDecoration(
+                  labelText: 'Enter text to summarize',
+                ),
+                minLines: 1,
+                maxLines: 10,
+                onChanged: (value) => summaryInputController.text = value,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      summarizeText(summaryInputController.text);
+                    },
+                    child: const Text('Summarize'),
                   ),
-                  minLines: 1,
-                  maxLines: 10,
-                  onChanged: (value) => summaryInputController.text = value,
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        summarizeText(summaryInputController.text);
-                      },
-                      child: const Text('Summarize'),
-                    ),
-                    const SizedBox(width: 20),
-                    Column(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            summarizeText(summaryTextSample);
-                          },
-                          child: const Text('Summarize sample tex'),
+                  const SizedBox(width: 20),
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          summarizeText(summaryTextSample);
+                        },
+                        child: const Text('Summarize sample tex'),
+                      ),
+                      const SizedBox(height: 20),
+                      TextButton(
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (context) =>
+                              const SampleTextDialogButton(),
                         ),
-                        const SizedBox(height: 20),
-                        TextButton(
-                          onPressed: () => showDialog<String>(
-                            context: context,
-                            builder: (context) =>
-                                const SampleTextDialogButton(),
-                          ),
-                          child: const Text('See sample text'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                const Text('Summarized Text:'),
-                const SizedBox(height: 10),
-                SelectableText(summaryResult),
-              ],
-            ),
+                        child: const Text('See sample text'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              const Text('Summarized Text:'),
+              const SizedBox(height: 10),
+              SelectableText(summaryResult),
+            ],
           ),
         ),
       ),
