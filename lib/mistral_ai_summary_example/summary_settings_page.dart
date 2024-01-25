@@ -24,7 +24,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   void initState() {
     super.initState();
 
-    summarySettings = widget.initialSettings;
+    summarySettings
+      ..maxTokens = widget.initialSettings.maxTokens
+      ..model = widget.initialSettings.model
+      ..randomSeed = widget.initialSettings.randomSeed
+      ..safePrompt = widget.initialSettings.safePrompt
+      ..temperature = widget.initialSettings.temperature
+      ..topP = widget.initialSettings.topP;
   }
 
   @override
