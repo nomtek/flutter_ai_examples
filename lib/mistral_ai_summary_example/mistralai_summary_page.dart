@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mistral_ai_chat_example_app/l10n/l10n.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
@@ -115,8 +116,7 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
                       TextButton(
                         onPressed: () => showDialog<String>(
                           context: context,
-                          builder: (context) =>
-                              const SampleTextDialogButton(),
+                          builder: (context) => const SampleTextDialogButton(),
                         ),
                         child: const Text('See sample text'),
                       ),
@@ -143,19 +143,32 @@ class SampleTextDialogButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Close'),
-            ),
             const Expanded(
               child: SingleChildScrollView(
                 child: SelectableText(summaryTextSample),
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Clipboard.setData(
+                      const ClipboardData(text: summaryTextSample),
+                    );
+                  },
+                  child: const Text('Copy all'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Close'),
+                ),
+              ],
             ),
           ],
         ),
