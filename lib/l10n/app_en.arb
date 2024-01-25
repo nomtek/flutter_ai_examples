@@ -1,13 +1,5 @@
 {
   "@@locale": "en",
-  "mistralAIChatTitle": "MistralAI Chat",
-  "@mistralAIChatTitle": {
-    "description": "Title of the chat page"
-  },
-  "chatMessageInputHint": "Type your message here...",
-  "@chatMessageInputHint": {
-    "description": "Hint text for the chat message input field"
-  },
   "summaryPageTitle": "MistralAI Summary",
   "@summaryPageTitle": {
     "description": "Title of the Mistral AI summary page"
