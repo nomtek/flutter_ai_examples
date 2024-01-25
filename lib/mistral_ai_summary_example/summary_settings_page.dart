@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/summary_settings.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
 class SettingsWidget extends StatefulWidget {
@@ -17,7 +17,7 @@ class SettingsWidget extends StatefulWidget {
 }
 
 class _SettingsWidgetState extends State<SettingsWidget> {
-  String model = 'mistral-small';
+  MistralAIModel model = MistralAIModel.mistralSmall;
   double temperature = 0.7;
   double topP = 1;
   int? maxTokens;
@@ -54,25 +54,25 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               child: ListView(
                 children: [
                   ListTile(
-                    title: Row(
-                      children: [
-                        Text('Model: $model'),
-                        const SizedBox(width: 20),
-                        TextButton(
-                          onPressed: () => showDialog<String>(
-                            context: context,
-                            builder: (context) => SeeAvailableModelsDialog(
-                              mistralAIClient: widget.mistralAIClient,
-                            ),
-                          ),
-                          child: const Text('See available models'),
-                        ),
-                      ],
-                    ),
-                    subtitle: TextField(
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) => setState(() => model = value),
-                      controller: modelController,
+                    title: Text('Model: ${model.name}'),
+                    subtitle: DropdownButton<MistralAIModel>(
+                      value: model,
+                      onChanged: (MistralAIModel? newValue) {
+                        if (newValue == null) {
+                          return;
+                        }
+                        setState(() {
+                          model = newValue;
+                        });
+                      },
+                      items: MistralAIModel.values
+                          .map<DropdownMenuItem<MistralAIModel>>(
+                              (MistralAIModel model) {
+                        return DropdownMenuItem<MistralAIModel>(
+                          value: model,
+                          child: Text(model.name),
+                        );
+                      }).toList(),
                     ),
                   ),
                   ListTile(
@@ -146,48 +146,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   child: const Text('Save'),
                 ),
               ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SeeAvailableModelsDialog extends StatelessWidget {
-  const SeeAvailableModelsDialog({required this.mistralAIClient, super.key});
-
-  final MistralAIClient mistralAIClient;
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Close'),
-            ),
-            FutureBuilder(
-              future: mistralAIClient.listModels(),
-              builder: (context, snapshot) {
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: snapshot.data?.data.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: SelectableText(
-                          snapshot.data?.data[index].id ?? '',
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
             ),
           ],
         ),

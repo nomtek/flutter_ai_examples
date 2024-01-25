@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/l10n/l10n.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/summary_settings.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/summary_settings_page.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/utils.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
