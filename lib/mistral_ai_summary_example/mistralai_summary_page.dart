@@ -20,6 +20,12 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
 
   SummarySettings summarySettings = SummarySettings();
 
+  @override
+  void dispose() {
+    summaryInputController.dispose();
+    super.dispose();
+  }
+
   Future<void> summarizeText(String text) async {
     setState(() {
       summaryResult = 'Loading...';

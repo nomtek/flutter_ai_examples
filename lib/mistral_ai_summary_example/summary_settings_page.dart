@@ -28,6 +28,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   }
 
   @override
+  void dispose() {
+    modelController.dispose();
+    maxTokensController.dispose();
+    randomSeedController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // to long to put in one line
     final temperatureStringValue =
