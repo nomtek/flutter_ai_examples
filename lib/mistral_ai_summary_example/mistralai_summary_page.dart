@@ -63,6 +63,7 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
                 context,
                 MaterialPageRoute<SummarySettings>(
                   builder: (BuildContext context) => SettingsWidget(
+                    mistralAIClient: mistralAIClient,
                     initialSettings: summarySettings,
                   ),
                 ),

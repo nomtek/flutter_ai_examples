@@ -3,9 +3,14 @@ import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/summary_s
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
 class SettingsWidget extends StatefulWidget {
-  const SettingsWidget({required this.initialSettings, super.key});
+  const SettingsWidget({
+    required this.initialSettings,
+    required this.mistralAIClient,
+    super.key,
+  });
 
   final SummarySettings initialSettings;
+  final MistralAIClient mistralAIClient;
 
   @override
   State<SettingsWidget> createState() => _SettingsWidgetState();
@@ -56,8 +61,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         TextButton(
                           onPressed: () => showDialog<String>(
                             context: context,
-                            builder: (context) =>
-                                const SeeAvailableModelsDialog(),
+                            builder: (context) => SeeAvailableModelsDialog(
+                              mistralAIClient: widget.mistralAIClient,
+                            ),
                           ),
                           child: const Text('See available models'),
                         ),
@@ -149,14 +155,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 }
 
 class SeeAvailableModelsDialog extends StatelessWidget {
-  const SeeAvailableModelsDialog({super.key});
+  const SeeAvailableModelsDialog({required this.mistralAIClient, super.key});
+
+  final MistralAIClient mistralAIClient;
 
   @override
   Widget build(BuildContext context) {
-    final mistralAIClient = MistralAIClient(
-      apiKey: '',
-    );
-
     return Dialog(
       child: Padding(
         padding: const EdgeInsets.all(8),
