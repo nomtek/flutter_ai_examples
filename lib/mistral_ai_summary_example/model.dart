@@ -7,12 +7,12 @@ class SummarySettings {
     this.safePrompt = false,
     this.randomSeed,
   });
-  final MistralAIModel model;
-  final double temperature;
-  final double topP;
-  final int? maxTokens;
-  final bool safePrompt;
-  final int? randomSeed;
+  MistralAIModel model;
+  double temperature;
+  double topP;
+  int? maxTokens;
+  bool safePrompt;
+  int? randomSeed;
 }
 
 enum MistralAIModel {

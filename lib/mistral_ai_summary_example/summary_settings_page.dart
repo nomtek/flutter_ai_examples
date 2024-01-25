@@ -17,12 +17,7 @@ class SettingsWidget extends StatefulWidget {
 }
 
 class _SettingsWidgetState extends State<SettingsWidget> {
-  MistralAIModel model = MistralAIModel.mistralSmall;
-  double temperature = 0.7;
-  double topP = 1;
-  int? maxTokens;
-  bool safePrompt = false;
-  int? randomSeed;
+  SummarySettings summarySettings = SummarySettings();
 
   final TextEditingController modelController = TextEditingController();
   final TextEditingController maxTokensController = TextEditingController();
@@ -31,13 +26,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   @override
   void initState() {
     super.initState();
-    temperature = widget.initialSettings.temperature;
-    topP = widget.initialSettings.topP;
-    maxTokens = widget.initialSettings.maxTokens;
-    safePrompt = widget.initialSettings.safePrompt;
-    randomSeed = widget.initialSettings.randomSeed;
-    maxTokensController.text = maxTokens?.toString() ?? '';
-    randomSeedController.text = randomSeed?.toString() ?? '';
+
+    summarySettings = widget.initialSettings;
   }
 
   @override
@@ -54,15 +44,15 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               child: ListView(
                 children: [
                   ListTile(
-                    title: Text('Model: ${model.name}'),
+                    title: Text('Model: ${summarySettings.model.name}'),
                     subtitle: DropdownButton<MistralAIModel>(
-                      value: model,
+                      value: summarySettings.model,
                       onChanged: (MistralAIModel? newValue) {
                         if (newValue == null) {
                           return;
                         }
                         setState(() {
-                          model = newValue;
+                          summarySettings.model = newValue;
                         });
                       },
                       items: MistralAIModel.values
@@ -76,51 +66,84 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     ),
                   ),
                   ListTile(
-                    title:
-                        Text('Temperature: ${temperature.toStringAsFixed(2)}'),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Temperature: '
+                            '${summarySettings.temperature.toStringAsFixed(2)}'),
+                        const Text(
+                          'We generally recommend altering '
+                          'this or Top P but not both.',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
                     subtitle: Slider(
-                      value: temperature,
-                      label: temperature.toStringAsFixed(2),
+                      value: summarySettings.temperature,
+                      label: summarySettings.temperature.toStringAsFixed(2),
                       onChanged: (value) => setState(
-                        () => temperature =
+                        () => summarySettings.temperature =
                             double.parse(value.toStringAsFixed(2)),
                       ),
                     ),
                   ),
                   ListTile(
-                    title: Text('Top P: ${topP.toStringAsFixed(2)}'),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Top P: ${summarySettings.topP.toStringAsFixed(2)}',
+                        ),
+                        const Text(
+                          'We generally recommend altering '
+                          'this or Temperature but not both.',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
                     subtitle: Slider(
-                      value: topP,
-                      label: topP.toStringAsFixed(2),
+                      value: summarySettings.topP,
+                      label: summarySettings.topP.toStringAsFixed(2),
                       onChanged: (value) => setState(
-                        () => topP = double.parse(value.toStringAsFixed(2)),
+                        () => summarySettings.topP =
+                            double.parse(value.toStringAsFixed(2)),
                       ),
                     ),
                   ),
                   ListTile(
-                    title: Text('Max tokens: ${maxTokens ?? 'unlimited'}'),
+                    title: Text('Max tokens: '
+                        '${summarySettings.maxTokens ?? 'unlimited'}'),
                     subtitle: TextField(
                       keyboardType: TextInputType.number,
                       onChanged: (value) => setState(
-                        () => maxTokens = int.tryParse(value),
+                        () => summarySettings.maxTokens = int.tryParse(value),
                       ),
                       controller: maxTokensController,
                     ),
                   ),
                   ListTile(
-                    title:
-                        Text("Safe prompt: ${safePrompt ? 'true' : 'false'}"),
+                    title: Text(
+                      'Safe prompt: ${summarySettings.safePrompt}',
+                    ),
                     trailing: Switch(
-                      value: safePrompt,
-                      onChanged: (value) => setState(() => safePrompt = value),
+                      value: summarySettings.safePrompt,
+                      onChanged: (value) =>
+                          setState(() => summarySettings.safePrompt = value),
                     ),
                   ),
                   ListTile(
-                    title: Text('Random seed: $randomSeed'),
+                    title: Text('Random seed: '
+                        '${summarySettings.randomSeed ?? 'none'}'),
                     subtitle: TextField(
                       keyboardType: TextInputType.number,
                       onChanged: (value) => setState(
-                        () => randomSeed = int.tryParse(value),
+                        () => summarySettings.randomSeed = int.tryParse(value),
                       ),
                       controller: randomSeedController,
                     ),
@@ -132,16 +155,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(
-                      context,
-                      SummarySettings(
-                        temperature: temperature,
-                        topP: topP,
-                        maxTokens: maxTokens,
-                        safePrompt: safePrompt,
-                        randomSeed: randomSeed,
-                      ),
-                    );
+                    Navigator.pop(context, summarySettings);
                   },
                   child: const Text('Save'),
                 ),
