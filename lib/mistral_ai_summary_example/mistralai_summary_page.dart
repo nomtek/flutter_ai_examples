@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/l10n/l10n.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/summary_settings_page.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/utils.dart';
@@ -13,10 +14,6 @@ class MistralAISummaryPage extends StatefulWidget {
 }
 
 class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
-  final MistralAIClient mistralAIClient = MistralAIClient(
-    apiKey: '',
-  );
-
   final TextEditingController summaryInputController = TextEditingController();
 
   String summaryResult = '';
@@ -63,7 +60,6 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
                 context,
                 MaterialPageRoute<SummarySettings>(
                   builder: (BuildContext context) => SettingsWidget(
-                    mistralAIClient: mistralAIClient,
                     initialSettings: summarySettings,
                   ),
                 ),

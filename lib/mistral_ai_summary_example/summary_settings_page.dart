@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
-import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
 class SettingsWidget extends StatefulWidget {
   const SettingsWidget({
     required this.initialSettings,
-    required this.mistralAIClient,
     super.key,
   });
 
   final SummarySettings initialSettings;
-  final MistralAIClient mistralAIClient;
 
   @override
   State<SettingsWidget> createState() => _SettingsWidgetState();
@@ -32,6 +29,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // to long to put in one line
+    final temperatureStringValue =
+        summarySettings.temperature.toStringAsFixed(2);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -69,8 +70,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Temperature: '
-                            '${summarySettings.temperature.toStringAsFixed(2)}'),
+                        Text('Temperature: $temperatureStringValue'),
                         const Text(
                           'We generally recommend altering '
                           'this or Top P but not both.',
