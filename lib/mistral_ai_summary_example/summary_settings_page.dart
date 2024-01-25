@@ -47,7 +47,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         title: const Text('Settings'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             Expanded(
