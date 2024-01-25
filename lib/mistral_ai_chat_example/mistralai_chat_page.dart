@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:mistral_ai_chat_example_app/l10n/l10n.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 import 'package:provider/provider.dart';
 
@@ -136,7 +135,7 @@ class _ChatMessageInputState extends State<_ChatMessageInput> {
       textInputAction: TextInputAction.send,
       controller: messageController,
       decoration: InputDecoration(
-        hintText: context.l10n.chatMessageInputHint,
+        hintText: 'Type your message here...',
         suffixIcon: showLoading
             ? const _TextFieldProgressIndicator()
             : IconButton(
