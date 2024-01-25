@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
         body: ListView(
           children: [
             ListTile(
-              title: Text(context.l10n.mistralAIChatTitle),
+              title: const Text('MistralAI Chat example'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => const MistralAIChatRoute().go(context),
             ),
