@@ -13,6 +13,7 @@ class _MistralAiLlmControllerPageState
   final TextEditingController commandInputController = TextEditingController();
   int sound = 50;
   int temperature = 20;
+  bool showLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +63,15 @@ class _MistralAiLlmControllerPageState
               ),
               TextField(
                 controller: commandInputController,
+                decoration: InputDecoration(
+                  hintText: 'Type your message here...',
+                  suffixIcon: showLoading
+                      ? const CircularProgressIndicator()
+                      : IconButton(
+                          icon: const Icon(Icons.send),
+                          onPressed: () {},
+                        ),
+                ),
               ),
             ],
           ),
