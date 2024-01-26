@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/prompt.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
+import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
 class MistralAiLlmControllerPage extends StatefulWidget {
   const MistralAiLlmControllerPage({super.key});
@@ -14,6 +17,27 @@ class _MistralAiLlmControllerPageState
   int sound = 50;
   int temperature = 20;
   bool showLoading = false;
+
+  Future<void> sendCommand(String command) async {
+    print('COMMAND: $command');
+    try {
+      setState(() => showLoading = true);
+      final response = await mistralAIClient.chat(
+        ChatParams(
+          model: 'mistral-medium',
+          messages: [
+            const ChatMessage(role: 'system', content: controllerDescription),
+            const ChatMessage(role: 'system', content: controllerExample),
+            ChatMessage(role: 'user', content: command),
+          ],
+        ),
+      );
+      setState(() => showLoading = false);
+      print('Result: \n ${response.choices.last.message.content}');
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +93,9 @@ class _MistralAiLlmControllerPageState
                       ? const CircularProgressIndicator()
                       : IconButton(
                           icon: const Icon(Icons.send),
-                          onPressed: () {},
+                          onPressed: () {
+                            sendCommand(commandInputController.text);
+                          },
                         ),
                 ),
               ),
