@@ -22,6 +22,10 @@ RouteBase get $homeRoute => GoRouteData.$route(
           path: 'mistralai-summary',
           factory: $MistralAISummaryRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'mistralai-llm-controller',
+          factory: $MistralAiLlmControllerRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -66,6 +70,24 @@ extension $MistralAISummaryRouteExtension on MistralAISummaryRoute {
 
   String get location => GoRouteData.$location(
         '/mistralai-summary',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $MistralAiLlmControllerRouteExtension on MistralAiLlmControllerRoute {
+  static MistralAiLlmControllerRoute _fromState(GoRouterState state) =>
+      const MistralAiLlmControllerRoute();
+
+  String get location => GoRouteData.$location(
+        '/mistralai-llm-controller',
       );
 
   void go(BuildContext context) => context.go(location);
