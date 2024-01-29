@@ -7,9 +7,8 @@ import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/ut
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
-//TDOD(mgruchala): Add simple error handling
-//TDOD(mgruchala): Add fancy light logic
-//TDOD(mgruchala): Set temperature to double
+// TODO(mgruchala): Set temperature to double.
+// TODO(mgruchala): Improve prompt do do nothing if the command is not recognized.
 
 class MistralAiLlmControllerPage extends StatefulWidget {
   const MistralAiLlmControllerPage({super.key});
@@ -24,8 +23,10 @@ class _MistralAiLlmControllerPageState
   final TextEditingController commandInputController = TextEditingController();
   int volume = 50;
   int temperature = 20;
-  Color colorOfLight = Color(0xFF000000);
+  Color colorOfLight = const Color(0xFF000000);
   bool showLoading = false;
+  String errorMessage = '';
+  String logger = '';
 
   Future<String> sendCommand(String command) async {
     final currentSettings = Settings(
@@ -34,10 +35,12 @@ class _MistralAiLlmControllerPageState
       color: colorOfLight.value,
     );
 
-    print('CURRENT SETTINGS: $currentSettings COMMAND: $command');
+    setState(() {
+      showLoading = true;
+      logger += '\nCURRENT SETTINGS: $currentSettings COMMAND: $command';
+    });
 
     try {
-      setState(() => showLoading = true);
       final response = await mistralAIClient.chat(
         ChatParams(
           model: 'mistral-medium',
@@ -45,10 +48,7 @@ class _MistralAiLlmControllerPageState
             ChatMessage(
               role: 'system',
               content: controllerDescription(
-                Settings(
-                  temperature: temperature,
-                  volume: volume,
-                ),
+                currentSettings,
               ),
             ),
             const ChatMessage(role: 'system', content: controllerExample),
@@ -56,11 +56,15 @@ class _MistralAiLlmControllerPageState
           ],
         ),
       );
-      setState(() => showLoading = false);
-      print('Result: \n ${response.choices.last.message.content}');
+
+      setState(() {
+        showLoading = false;
+        logger += '\nRESPONSE: ${response.choices.last.message.content}';
+      });
+
       return response.choices.last.message.content;
     } catch (e) {
-      print(e);
+      setState(() => errorMessage = e.toString());
       return Future.error(e);
     }
   }
@@ -68,14 +72,14 @@ class _MistralAiLlmControllerPageState
   void mapCommandResponseToUi(String response) {
     final filteredResponse = extractJson(response);
     if (filteredResponse == null) {
-      print('Invalid response: $response');
+      setState(() => errorMessage = 'Invalid response: $response');
       return;
     }
     final json = jsonDecode(filteredResponse) as Map<String, dynamic>;
     final name = json['name'];
     final parameters = json['parameters'] as String?;
     if (name == null || parameters == null) {
-      print('Invalid response: $response');
+      setState(() => errorMessage = 'Invalid response: $response');
       return;
     }
 
@@ -86,13 +90,9 @@ class _MistralAiLlmControllerPageState
         setState(() => volume = int.parse(parameters));
       case 'setColorOfLight':
         final color = getColorFromHex(parameters);
-        print('Color: $color');
-        if (color != null) {
-          setState(() => colorOfLight = color);
-        }
-        break;
+        setState(() => colorOfLight = color);
       default:
-        print('Unknown command: $name');
+        setState(() => errorMessage = 'Unknown command: $name');
     }
   }
 
@@ -134,6 +134,20 @@ class _MistralAiLlmControllerPageState
                         onChanged: (_) {},
                       ),
                     ),
+                    if (logger.isNotEmpty)
+                      ListTile(
+                        title: Text(
+                          'Logger: $logger',
+                          style: const TextStyle(color: Colors.green),
+                        ),
+                      ),
+                    if (errorMessage.isNotEmpty)
+                      ListTile(
+                        title: Text(
+                          'Error message: $errorMessage',
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -146,9 +160,18 @@ class _MistralAiLlmControllerPageState
                       : IconButton(
                           icon: const Icon(Icons.send),
                           onPressed: () async {
-                            final commandResult =
-                                await sendCommand(commandInputController.text);
-                            mapCommandResponseToUi(commandResult);
+                            setState(() {
+                              errorMessage = '';
+                              logger = '';
+                            });
+                            try {
+                              final commandResult = await sendCommand(
+                                commandInputController.text,
+                              );
+                              mapCommandResponseToUi(commandResult);
+                            } catch (e) {
+                              setState(() => errorMessage = e.toString());
+                            }
                           },
                         ),
                 ),
