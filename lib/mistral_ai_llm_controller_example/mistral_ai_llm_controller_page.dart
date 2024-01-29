@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/model.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/prompt.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/utils.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
@@ -16,7 +18,7 @@ class MistralAiLlmControllerPage extends StatefulWidget {
 class _MistralAiLlmControllerPageState
     extends State<MistralAiLlmControllerPage> {
   final TextEditingController commandInputController = TextEditingController();
-  int sound = 50;
+  int volume = 50;
   int temperature = 20;
   bool showLoading = false;
 
@@ -28,7 +30,15 @@ class _MistralAiLlmControllerPageState
         ChatParams(
           model: 'mistral-medium',
           messages: [
-            const ChatMessage(role: 'system', content: controllerDescription),
+            ChatMessage(
+              role: 'system',
+              content: controllerDescription(
+                Settings(
+                  temperature: temperature,
+                  volume: volume,
+                ),
+              ),
+            ),
             const ChatMessage(role: 'system', content: controllerExample),
             ChatMessage(role: 'user', content: command),
           ],
@@ -44,7 +54,12 @@ class _MistralAiLlmControllerPageState
   }
 
   void mapCommandResponseToUi(String response) {
-    final json = jsonDecode(response) as Map<String, dynamic>;
+    final filteredResponse = extractJson(response);
+    if (filteredResponse == null) {
+      print('Invalid response: $response');
+      return;
+    }
+    final json = jsonDecode(filteredResponse) as Map<String, dynamic>;
     final name = json['name'];
     final parameters = json['parameters'] as String?;
     if (name == null || parameters == null) {
@@ -56,7 +71,7 @@ class _MistralAiLlmControllerPageState
       case 'setTemperature':
         setState(() => temperature = int.parse(parameters));
       case 'setVolume':
-        setState(() => sound = int.parse(parameters));
+        setState(() => volume = int.parse(parameters));
       default:
         print('Unknown command: $name');
     }
@@ -84,13 +99,13 @@ class _MistralAiLlmControllerPageState
                       ),
                     ),
                     ListTile(
-                      title: Text('Volume: $sound '),
+                      title: Text('Volume: $volume '),
                       subtitle: Slider(
                         min: 0,
                         max: 100,
-                        value: sound.toDouble(),
+                        value: volume.toDouble(),
                         onChanged: (value) => setState(
-                          () => sound = value.toInt(),
+                          () => volume = value.toInt(),
                         ),
                       ),
                     ),
