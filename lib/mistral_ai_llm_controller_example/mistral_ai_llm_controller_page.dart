@@ -7,6 +7,10 @@ import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/ut
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
+//TDOD(mgruchala): Add simple error handling
+//TDOD(mgruchala): Add fancy light logic
+//TDOD(mgruchala): Set temperature to double
+
 class MistralAiLlmControllerPage extends StatefulWidget {
   const MistralAiLlmControllerPage({super.key});
 
@@ -20,10 +24,18 @@ class _MistralAiLlmControllerPageState
   final TextEditingController commandInputController = TextEditingController();
   int volume = 50;
   int temperature = 20;
+  Color colorOfLight = Color(0xFF000000);
   bool showLoading = false;
 
   Future<String> sendCommand(String command) async {
-    print('COMMAND: $command');
+    final currentSettings = Settings(
+      temperature: temperature,
+      volume: volume,
+      color: colorOfLight.value,
+    );
+
+    print('CURRENT SETTINGS: $currentSettings COMMAND: $command');
+
     try {
       setState(() => showLoading = true);
       final response = await mistralAIClient.chat(
@@ -72,6 +84,13 @@ class _MistralAiLlmControllerPageState
         setState(() => temperature = int.parse(parameters));
       case 'setVolume':
         setState(() => volume = int.parse(parameters));
+      case 'setColorOfLight':
+        final color = getColorFromHex(parameters);
+        print('Color: $color');
+        if (color != null) {
+          setState(() => colorOfLight = color);
+        }
+        break;
       default:
         print('Unknown command: $name');
     }
@@ -92,21 +111,18 @@ class _MistralAiLlmControllerPageState
                 child: ListView(
                   children: [
                     ListTile(
-                      title: const Text('Color'),
+                      title: const Text('Color of light:'),
                       subtitle: Container(
-                        color: Colors.red,
+                        color: colorOfLight,
                         height: 50,
                       ),
                     ),
                     ListTile(
                       title: Text('Volume: $volume '),
                       subtitle: Slider(
-                        min: 0,
                         max: 100,
                         value: volume.toDouble(),
-                        onChanged: (value) => setState(
-                          () => volume = value.toInt(),
-                        ),
+                        onChanged: (_) {},
                       ),
                     ),
                     ListTile(
@@ -115,9 +131,7 @@ class _MistralAiLlmControllerPageState
                         min: 15,
                         max: 25,
                         value: temperature.toDouble(),
-                        onChanged: (value) => setState(
-                          () => temperature = value.toInt(),
-                        ),
+                        onChanged: (_) {},
                       ),
                     ),
                   ],
