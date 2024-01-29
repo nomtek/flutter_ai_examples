@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/prompt.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
@@ -18,7 +20,7 @@ class _MistralAiLlmControllerPageState
   int temperature = 20;
   bool showLoading = false;
 
-  Future<void> sendCommand(String command) async {
+  Future<String> sendCommand(String command) async {
     print('COMMAND: $command');
     try {
       setState(() => showLoading = true);
@@ -34,8 +36,29 @@ class _MistralAiLlmControllerPageState
       );
       setState(() => showLoading = false);
       print('Result: \n ${response.choices.last.message.content}');
+      return response.choices.last.message.content;
     } catch (e) {
       print(e);
+      return Future.error(e);
+    }
+  }
+
+  void mapCommandResponseToUi(String response) {
+    final json = jsonDecode(response) as Map<String, dynamic>;
+    final name = json['name'];
+    final parameters = json['parameters'] as String?;
+    if (name == null || parameters == null) {
+      print('Invalid response: $response');
+      return;
+    }
+
+    switch (name) {
+      case 'setTemperature':
+        setState(() => temperature = int.parse(parameters));
+      case 'setVolume':
+        setState(() => sound = int.parse(parameters));
+      default:
+        print('Unknown command: $name');
     }
   }
 
@@ -61,7 +84,7 @@ class _MistralAiLlmControllerPageState
                       ),
                     ),
                     ListTile(
-                      title: Text('Sound: $sound '),
+                      title: Text('Volume: $sound '),
                       subtitle: Slider(
                         min: 0,
                         max: 100,
@@ -93,8 +116,10 @@ class _MistralAiLlmControllerPageState
                       ? const CircularProgressIndicator()
                       : IconButton(
                           icon: const Icon(Icons.send),
-                          onPressed: () {
-                            sendCommand(commandInputController.text);
+                          onPressed: () async {
+                            final commandResult =
+                                await sendCommand(commandInputController.text);
+                            mapCommandResponseToUi(commandResult);
                           },
                         ),
                 ),
