@@ -24,6 +24,12 @@ class _MistralAiLlmControllerPageState
   String errorMessage = '';
   String logger = '';
 
+  @override
+  void dispose() {
+    commandInputController.dispose();
+    super.dispose();
+  }
+
   Future<String> _getResponseFromAi(String command) async {
     setState(() {
       showLoading = true;
