@@ -8,7 +8,7 @@ import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/ut
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
-class MistralAiLlmControllerPage extends StatefulWidget {
+class MistralAILlmControllerPage extends StatefulWidget {
   const MistralAiLlmControllerPage({super.key});
 
   @override
