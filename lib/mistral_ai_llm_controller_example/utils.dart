@@ -39,12 +39,12 @@ Color getColorFromHex(String hexColor) {
   }
 }
 
-String createStartCommandLog(
+String commandMessage(
   String command,
   ControllerSettings controllerSettings,
 ) =>
     '\nCURRENT SETTINGS:\n$controllerSettings\nCOMMAND:\n$command';
 
-String createResponseLog(String response) => '\nRESPONSE:\n$response';
+String responseMessage(String response) => '\nRESPONSE:\n$response';
 
-String invalidResponse(String response) => 'Invalid response: $response';
+String invalidResponseMessage(String response) => 'Invalid response: $response';

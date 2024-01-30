@@ -41,10 +41,10 @@ class _MistralAiLlmControllerPageState
     });
   }
 
-  Future<String> _getResponseFromAi(String command) async {
+  Future<String> _getResponseFromAI(String command) async {
     setState(() {
       showLoading = true;
-      _log(createStartCommandLog(command, controllerSettings));
+      _log(commandMessage(command, controllerSettings));
     });
 
     final response = await mistralAIClient.chat(
@@ -65,7 +65,7 @@ class _MistralAiLlmControllerPageState
 
     setState(() {
       showLoading = false;
-      _log(createResponseLog(response.choices.last.message.content));
+      _log(responseMessage(response.choices.last.message.content));
     });
 
     return response.choices.last.message.content;
@@ -74,14 +74,14 @@ class _MistralAiLlmControllerPageState
   void _mapCommandResponseToUi(String response) {
     final filteredResponse = extractJson(response);
     if (filteredResponse == null) {
-      setState(() => errorMessage = invalidResponse(response));
+      setState(() => errorMessage = invalidResponseMessage(response));
       return;
     }
     final json = jsonDecode(filteredResponse) as Map<String, dynamic>;
     final name = json['name'];
     final parameters = json['parameters'] as String?;
     if (name == null || parameters == null) {
-      setState(() => errorMessage = invalidResponse(response));
+      setState(() => errorMessage = invalidResponseMessage(response));
       return;
     }
 
@@ -112,7 +112,7 @@ class _MistralAiLlmControllerPageState
       showLoading = true;
     });
     try {
-      final commandResult = await _getResponseFromAi(
+      final commandResult = await _getResponseFromAI(
         commandInputController.text,
       );
       _mapCommandResponseToUi(commandResult);
