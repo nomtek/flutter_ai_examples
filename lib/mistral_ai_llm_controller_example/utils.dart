@@ -49,3 +49,5 @@ String createStartCommandLog(
     '\nCURRENT SETTINGS:\n$controllerSettings\nCOMMAND:\n$command';
 
 String createResponseLog(String response) => '\nRESPONSE:\n$response';
+
+String invalidResponse(String response) => 'Invalid response: $response';

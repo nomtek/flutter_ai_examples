@@ -24,7 +24,7 @@ class _MistralAiLlmControllerPageState
   String errorMessage = '';
   String logger = '';
 
-  Future<String> sendCommand(String command) async {
+  Future<String> _getResponseFromAi(String command) async {
     setState(() {
       showLoading = true;
       logger += createStartCommandLog(
@@ -33,63 +33,73 @@ class _MistralAiLlmControllerPageState
       );
     });
 
-    try {
-      final response = await mistralAIClient.chat(
-        ChatParams(
-          model: 'mistral-medium',
-          messages: [
-            ChatMessage(
-              role: 'system',
-              content: controllerDescription(
-                controllerSettings,
-              ),
+    final response = await mistralAIClient.chat(
+      ChatParams(
+        model: 'mistral-medium',
+        messages: [
+          ChatMessage(
+            role: 'system',
+            content: controllerDescription(
+              controllerSettings,
             ),
-            const ChatMessage(role: 'system', content: controllerExample),
-            ChatMessage(role: 'user', content: command),
-          ],
-        ),
-      );
+          ),
+          const ChatMessage(role: 'system', content: controllerExample),
+          ChatMessage(role: 'user', content: command),
+        ],
+      ),
+    );
 
-      setState(() {
-        showLoading = false;
-        logger += createResponseLog(response.choices.last.message.content);
-      });
+    setState(() {
+      showLoading = false;
+      logger += createResponseLog(response.choices.last.message.content);
+    });
 
-      return response.choices.last.message.content;
-    } catch (e) {
-      setState(() => errorMessage = e.toString());
-      return Future.error(e);
-    }
+    return response.choices.last.message.content;
   }
 
-  void mapCommandResponseToUi(String response) {
+  void _mapCommandResponseToUi(String response) {
     final filteredResponse = extractJson(response);
     if (filteredResponse == null) {
-      setState(() => errorMessage = 'Invalid response: $response');
+      setState(() => errorMessage = invalidResponse(response));
       return;
     }
     final json = jsonDecode(filteredResponse) as Map<String, dynamic>;
     final name = json['name'];
     final parameters = json['parameters'] as String?;
     if (name == null || parameters == null) {
-      setState(() => errorMessage = 'Invalid response: $response');
+      setState(() => errorMessage = invalidResponse(response));
       return;
     }
 
     switch (name) {
-      case 'setTemperature':
+      case ControllerFunctions.setTemperature:
         setState(
           () => controllerSettings.temperature = double.parse(parameters),
         );
-      case 'setVolume':
+      case ControllerFunctions.setVolume:
         setState(
           () => controllerSettings.volume = double.parse(parameters).toInt(),
         );
-      case 'setColorOfLight':
+      case ControllerFunctions.setColorOfLight:
         final color = getColorFromHex(parameters);
         setState(() => controllerSettings.color = color);
       default:
-        setState(() => errorMessage = 'Unknown command: $name');
+        setState(() => errorMessage = 'Unknown command');
+    }
+  }
+
+  Future<void> _sendCommand() async {
+    setState(() {
+      errorMessage = '';
+      logger = '';
+    });
+    try {
+      final commandResult = await _getResponseFromAi(
+        commandInputController.text,
+      );
+      _mapCommandResponseToUi(commandResult);
+    } catch (e) {
+      setState(() => errorMessage = e.toString());
     }
   }
 
@@ -141,6 +151,13 @@ class _MistralAiLlmControllerPageState
                         ],
                       ),
                     ),
+                    if (errorMessage.isNotEmpty)
+                      ListTile(
+                        title: Text(
+                          'Error message: $errorMessage',
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -169,20 +186,7 @@ class _MistralAiLlmControllerPageState
                             )
                           : IconButton(
                               icon: const Icon(Icons.send),
-                              onPressed: () async {
-                                setState(() {
-                                  errorMessage = '';
-                                  logger = '';
-                                });
-                                try {
-                                  final commandResult = await sendCommand(
-                                    commandInputController.text,
-                                  );
-                                  mapCommandResponseToUi(commandResult);
-                                } catch (e) {
-                                  setState(() => errorMessage = e.toString());
-                                }
-                              },
+                              onPressed: _sendCommand,
                             ),
                     ),
                   ),
