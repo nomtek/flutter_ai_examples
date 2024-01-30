@@ -8,7 +8,6 @@ import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_c
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
 // TODO(mgruchala): Set temperature to double.
-// TODO(mgruchala): Improve prompt do do nothing if the command is not recognized.
 
 class MistralAiLlmControllerPage extends StatefulWidget {
   const MistralAiLlmControllerPage({super.key});
