@@ -1,13 +1,15 @@
-class Settings {
-  Settings({
-    required this.temperature,
-    required this.volume,
-    this.color = 0,
+import 'package:flutter/material.dart';
+
+class ControllerSettings {
+  ControllerSettings({
+    this.temperature = 20.0,
+    this.volume = 50,
+    this.color = Colors.black,
   });
 
-  final int temperature;
-  final int volume;
-  final int color;
+  double temperature;
+  int volume;
+  Color color;
 
   @override
   String toString() {

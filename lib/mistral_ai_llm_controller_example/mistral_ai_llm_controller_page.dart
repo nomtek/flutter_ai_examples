@@ -7,7 +7,7 @@ import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/ut
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
-// TODO(mgruchala): Set temperature to double.
+// TODO(mgruchala): Hide logger in dialog.
 
 class MistralAiLlmControllerPage extends StatefulWidget {
   const MistralAiLlmControllerPage({super.key});
@@ -20,23 +20,15 @@ class MistralAiLlmControllerPage extends StatefulWidget {
 class _MistralAiLlmControllerPageState
     extends State<MistralAiLlmControllerPage> {
   final TextEditingController commandInputController = TextEditingController();
-  int volume = 50;
-  int temperature = 20;
-  Color colorOfLight = const Color(0xFF000000);
+  ControllerSettings controllerSettings = ControllerSettings();
   bool showLoading = false;
   String errorMessage = '';
   String logger = '';
 
   Future<String> sendCommand(String command) async {
-    final currentSettings = Settings(
-      temperature: temperature,
-      volume: volume,
-      color: colorOfLight.value,
-    );
-
     setState(() {
       showLoading = true;
-      logger += '\nCURRENT SETTINGS: $currentSettings COMMAND: $command';
+      logger += '\nCURRENT SETTINGS: $controllerSettings COMMAND: $command';
     });
 
     try {
@@ -47,7 +39,7 @@ class _MistralAiLlmControllerPageState
             ChatMessage(
               role: 'system',
               content: controllerDescription(
-                currentSettings,
+                controllerSettings,
               ),
             ),
             const ChatMessage(role: 'system', content: controllerExample),
@@ -84,12 +76,14 @@ class _MistralAiLlmControllerPageState
 
     switch (name) {
       case 'setTemperature':
-        setState(() => temperature = int.parse(parameters));
+        setState(
+          () => controllerSettings.temperature = double.parse(parameters),
+        );
       case 'setVolume':
-        setState(() => volume = int.parse(parameters));
+        setState(() => controllerSettings.volume = int.parse(parameters));
       case 'setColorOfLight':
         final color = getColorFromHex(parameters);
-        setState(() => colorOfLight = color);
+        setState(() => controllerSettings.color = color);
       default:
         setState(() => errorMessage = 'Unknown command: $name');
     }
@@ -112,25 +106,35 @@ class _MistralAiLlmControllerPageState
                     ListTile(
                       title: const Text('Color of light:'),
                       subtitle: Container(
-                        color: colorOfLight,
+                        color: controllerSettings.color,
                         height: 50,
                       ),
                     ),
                     ListTile(
-                      title: Text('Volume: $volume '),
+                      title: Text('Volume: ${controllerSettings.volume} '),
                       subtitle: Slider(
                         max: 100,
-                        value: volume.toDouble(),
+                        value: controllerSettings.volume.toDouble(),
                         onChanged: (_) {},
                       ),
                     ),
                     ListTile(
-                      title: Text('Temperature (Celsius): $temperature'),
-                      subtitle: Slider(
-                        min: 15,
-                        max: 25,
-                        value: temperature.toDouble(),
-                        onChanged: (_) {},
+                      title: Text('Temperature (Celsius): '
+                          '${controllerSettings.temperature}'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Range: 15 - 25',
+                            textAlign: TextAlign.start,
+                          ),
+                          Slider(
+                            min: 15,
+                            max: 25,
+                            value: controllerSettings.temperature.toDouble(),
+                            onChanged: (_) {},
+                          ),
+                        ],
                       ),
                     ),
                     if (logger.isNotEmpty)
@@ -155,7 +159,10 @@ class _MistralAiLlmControllerPageState
                 decoration: InputDecoration(
                   hintText: 'Type your message here...',
                   suffixIcon: showLoading
-                      ? const CircularProgressIndicator()
+                      ? const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: CircularProgressIndicator(),
+                        )
                       : IconButton(
                           icon: const Icon(Icons.send),
                           onPressed: () async {

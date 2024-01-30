@@ -1,6 +1,6 @@
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/model.dart';
 
-String controllerDescription(Settings currentSettings) =>
+String controllerDescription(ControllerSettings currentSettings) =>
     'You are a helpful assistant designed to output only JSON. '
     'You are given command and a set of functions that you can perform. '
     'Based on the command you should chose one of the provided functions '
