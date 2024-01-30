@@ -22,8 +22,8 @@ library;
 
 import 'dart:convert';
 
+import 'package:characters/characters.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 
 part 'merges_binary.dart';
 part 'vocab_base64.dart';
@@ -149,7 +149,6 @@ class MistralTokenizer {
 
     // space is represented by "▁" (thick underscore, id 28705)
     promptAltered = promptAltered.replaceAll(' ', _thickUnderscore);
-
     final chars = promptAltered.characters;
     for (var i = 0; i < chars.length; i++) {
       final char = chars.elementAt(i);
@@ -170,7 +169,7 @@ class MistralTokenizer {
             //
             // if it does happen, let's follow the js implementation
             // and add <UNK> token instead of crash
-            debugPrint(
+            print(
               'Encountered unknown character: $char '
               '(partial utf8 byte $utf8Byte, hex: ${_utf8ByteToHex(utf8Byte)})',
             );
