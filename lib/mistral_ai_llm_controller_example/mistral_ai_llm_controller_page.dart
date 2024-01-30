@@ -9,15 +9,15 @@ import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_c
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
 class MistralAILlmControllerPage extends StatefulWidget {
-  const MistralAiLlmControllerPage({super.key});
+  const MistralAILlmControllerPage({super.key});
 
   @override
-  State<MistralAiLlmControllerPage> createState() =>
+  State<MistralAILlmControllerPage> createState() =>
       _MistralAiLlmControllerPageState();
 }
 
 class _MistralAiLlmControllerPageState
-    extends State<MistralAiLlmControllerPage> {
+    extends State<MistralAILlmControllerPage> {
   final TextEditingController commandInputController = TextEditingController();
   ControllerSettings controllerSettings = ControllerSettings();
   bool showLoading = false;

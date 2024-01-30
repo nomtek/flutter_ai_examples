@@ -45,5 +45,5 @@ class MistralAiLlmControllerRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) =>
-      const MistralAiLlmControllerPage();
+      const MistralAILlmControllerPage();
 }
