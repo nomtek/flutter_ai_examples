@@ -30,13 +30,21 @@ class _MistralAiLlmControllerPageState
     super.dispose();
   }
 
+  void _log(String message) {
+    setState(() => logger += message);
+  }
+
+  void _clearLogAndError() {
+    setState(() {
+      logger = '';
+      errorMessage = '';
+    });
+  }
+
   Future<String> _getResponseFromAi(String command) async {
     setState(() {
       showLoading = true;
-      logger += createStartCommandLog(
-        command,
-        controllerSettings,
-      );
+      _log(createStartCommandLog(command, controllerSettings));
     });
 
     final response = await mistralAIClient.chat(
@@ -57,7 +65,7 @@ class _MistralAiLlmControllerPageState
 
     setState(() {
       showLoading = false;
-      logger += createResponseLog(response.choices.last.message.content);
+      _log(createResponseLog(response.choices.last.message.content));
     });
 
     return response.choices.last.message.content;
@@ -100,8 +108,8 @@ class _MistralAiLlmControllerPageState
 
   Future<void> _sendCommand() async {
     setState(() {
-      errorMessage = '';
-      logger = '';
+      _clearLogAndError();
+      showLoading = true;
     });
     try {
       final commandResult = await _getResponseFromAi(
