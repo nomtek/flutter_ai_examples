@@ -1,4 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'model.g.dart';
+
+@JsonSerializable()
+class ControllerResponse {
+  ControllerResponse({required this.name, required this.parameters});
+
+  factory ControllerResponse.fromJson(Map<String, dynamic> json) =>
+      _$ControllerResponseFromJson(json);
+
+  final String name;
+  final String parameters;
+
+  Map<String, dynamic> toJson() => _$ControllerResponseToJson(this);
+}
 
 class ControllerFunctions {
   static const String setTemperature = 'setTemperature';

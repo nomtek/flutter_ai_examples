@@ -77,29 +77,27 @@ class _MistralAiLlmControllerPageState
       setState(() => errorMessage = invalidResponseMessage(response));
       return;
     }
-    final json = jsonDecode(filteredResponse) as Map<String, dynamic>;
-    final name = json['name'];
-    final parameters = json['parameters'] as String?;
-    if (name == null || parameters == null) {
-      setState(() => errorMessage = invalidResponseMessage(response));
-      return;
-    }
+    final controllerResponse = ControllerResponse.fromJson(
+        jsonDecode(filteredResponse) as Map<String, dynamic>);
 
-    switch (name) {
+    switch (controllerResponse.name) {
       case ControllerFunctions.setTemperature:
         setState(
-          () => controllerSettings.temperature = double.parse(parameters),
+          () => controllerSettings.temperature =
+              double.parse(controllerResponse.parameters),
         );
       case ControllerFunctions.setVolume:
         setState(
-          () => controllerSettings.volume = double.parse(parameters).toInt(),
+          () => controllerSettings.volume =
+              double.parse(controllerResponse.parameters).toInt(),
         );
       case ControllerFunctions.setColorOfLight:
-        final color = getColorFromHex(parameters);
+        final color = getColorFromHex(controllerResponse.parameters);
         setState(() => controllerSettings.color = color);
       case ControllerFunctions.turnOnTV:
         setState(
-          () => controllerSettings.isTVOn = bool.parse(parameters),
+          () => controllerSettings.isTVOn =
+              bool.parse(controllerResponse.parameters),
         );
       default:
         setState(() => errorMessage = 'Unknown command');
