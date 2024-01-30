@@ -83,6 +83,10 @@ class _MistralAiLlmControllerPageState
       case ControllerFunctions.setColorOfLight:
         final color = getColorFromHex(parameters);
         setState(() => controllerSettings.color = color);
+      case ControllerFunctions.turnOnTV:
+        setState(
+          () => controllerSettings.isTVOn = bool.parse(parameters),
+        );
       default:
         setState(() => errorMessage = 'Unknown command');
     }
@@ -149,6 +153,13 @@ class _MistralAiLlmControllerPageState
                             onChanged: (_) {},
                           ),
                         ],
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('TV'),
+                      trailing: Switch(
+                        value: controllerSettings.isTVOn,
+                        onChanged: (_) {},
                       ),
                     ),
                     if (errorMessage.isNotEmpty)

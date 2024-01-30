@@ -22,6 +22,8 @@ const String controllerExample = '''
   "setVolume" (parameters:volume:number))
 
   "setColorOfLight" (parameters:color:hex) returns color in hex format only (#RRGGBB)
+
+  "turnOnTV" (parameters:bool)
   ####Instructions
   Respond by returning a function names with parameters and only with valid JSON in format: { "name": "value", "parameters":  "" }
  
@@ -35,4 +37,10 @@ const String controllerExample = '''
   ###
   INPUT: "Set color of light to blue" 
   RESULT: { "name": "setColorOfLight", "parameters": "#ffa500" }
+  ###
+  INPUT: "Turn on TV" 
+  RESULT: { "name": "turnOnTV", "parameters": "true" }
+  ###
+  INPUT: "Turn off TV" 
+  RESULT: { "name": "turnOnTV", "parameters": "false" }
   ''';
