@@ -3,15 +3,12 @@ import 'dart:ui';
 
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/model.dart';
 
-// TODO(mgruchala): Add tests.
 String? extractJson(String input) {
   final regExp = RegExp(r'\{[^}]*\}');
   final Match? match = regExp.firstMatch(input);
 
   return match?.group(0);
 }
-
-// TODO(mgruchala): Add tests.
 
 /// Returns a `Color` object corresponding to the hexadecimal color string,
 ///
