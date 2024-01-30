@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/logger_dialog.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/model.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/prompt.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/utils.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
-
-// TODO(mgruchala): Hide logger in dialog.
 
 class MistralAiLlmControllerPage extends StatefulWidget {
   const MistralAiLlmControllerPage({super.key});
@@ -28,7 +27,10 @@ class _MistralAiLlmControllerPageState
   Future<String> sendCommand(String command) async {
     setState(() {
       showLoading = true;
-      logger += '\nCURRENT SETTINGS: $controllerSettings COMMAND: $command';
+      logger += createStartCommandLog(
+        command,
+        controllerSettings,
+      );
     });
 
     try {
@@ -50,7 +52,7 @@ class _MistralAiLlmControllerPageState
 
       setState(() {
         showLoading = false;
-        logger += '\nRESPONSE: ${response.choices.last.message.content}';
+        logger += createResponseLog(response.choices.last.message.content);
       });
 
       return response.choices.last.message.content;
@@ -80,7 +82,9 @@ class _MistralAiLlmControllerPageState
           () => controllerSettings.temperature = double.parse(parameters),
         );
       case 'setVolume':
-        setState(() => controllerSettings.volume = int.parse(parameters));
+        setState(
+          () => controllerSettings.volume = double.parse(parameters).toInt(),
+        );
       case 'setColorOfLight':
         final color = getColorFromHex(parameters);
         setState(() => controllerSettings.color = color);
@@ -131,56 +135,58 @@ class _MistralAiLlmControllerPageState
                           Slider(
                             min: 15,
                             max: 25,
-                            value: controllerSettings.temperature.toDouble(),
+                            value: controllerSettings.temperature,
                             onChanged: (_) {},
                           ),
                         ],
                       ),
                     ),
-                    if (logger.isNotEmpty)
-                      ListTile(
-                        title: Text(
-                          'Logger: $logger',
-                          style: const TextStyle(color: Colors.green),
-                        ),
-                      ),
-                    if (errorMessage.isNotEmpty)
-                      ListTile(
-                        title: Text(
-                          'Error message: $errorMessage',
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      ),
                   ],
                 ),
               ),
-              TextField(
-                controller: commandInputController,
-                decoration: InputDecoration(
-                  hintText: 'Type your message here...',
-                  suffixIcon: showLoading
-                      ? const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: CircularProgressIndicator(),
-                        )
-                      : IconButton(
-                          icon: const Icon(Icons.send),
-                          onPressed: () async {
-                            setState(() {
-                              errorMessage = '';
-                              logger = '';
-                            });
-                            try {
-                              final commandResult = await sendCommand(
-                                commandInputController.text,
-                              );
-                              mapCommandResponseToUi(commandResult);
-                            } catch (e) {
-                              setState(() => errorMessage = e.toString());
-                            }
-                          },
-                        ),
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => showDialog<void>(
+                      context: context,
+                      builder: (context) => LoggerDialog(
+                        logger: logger,
+                        errorMessage: errorMessage,
+                      ),
+                    ),
+                    child: const Text('Logger'),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: commandInputController,
+                    decoration: InputDecoration(
+                      hintText: 'Type your message here...',
+                      suffixIcon: showLoading
+                          ? const Padding(
+                              padding: EdgeInsets.all(8),
+                              child: CircularProgressIndicator(),
+                            )
+                          : IconButton(
+                              icon: const Icon(Icons.send),
+                              onPressed: () async {
+                                setState(() {
+                                  errorMessage = '';
+                                  logger = '';
+                                });
+                                try {
+                                  final commandResult = await sendCommand(
+                                    commandInputController.text,
+                                  );
+                                  mapCommandResponseToUi(commandResult);
+                                } catch (e) {
+                                  setState(() => errorMessage = e.toString());
+                                }
+                              },
+                            ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -1,6 +1,8 @@
 import 'dart:core';
 import 'dart:ui';
 
+import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/model.dart';
+
 // TODO(mgruchala): Add tests.
 String? extractJson(String input) {
   final regExp = RegExp(r'\{[^}]*\}');
@@ -39,3 +41,11 @@ Color getColorFromHex(String hexColor) {
     throw Exception('Invalid color: $hexColor');
   }
 }
+
+String createStartCommandLog(
+  String command,
+  ControllerSettings controllerSettings,
+) =>
+    '\nCURRENT SETTINGS:\n$controllerSettings\nCOMMAND:\n$command';
+
+String createResponseLog(String response) => '\nRESPONSE:\n$response';
