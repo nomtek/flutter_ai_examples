@@ -14,7 +14,7 @@ final router = GoRouter(routes: $appRoutes);
   routes: [
     TypedGoRoute<MistralAIChatRoute>(path: 'mistralai-chat'),
     TypedGoRoute<MistralAISummaryRoute>(path: 'mistralai-summary'),
-    TypedGoRoute<MistralAiLlmControllerRoute>(path: 'mistralai-llm-controller'),
+    TypedGoRoute<MistralAILlmControllerRoute>(path: 'mistralai-llm-controller'),
   ],
 )
 class HomeRoute extends GoRouteData {
@@ -40,8 +40,8 @@ class MistralAISummaryRoute extends GoRouteData {
       const MistralAISummaryPage();
 }
 
-class MistralAiLlmControllerRoute extends GoRouteData {
-  const MistralAiLlmControllerRoute();
+class MistralAILlmControllerRoute extends GoRouteData {
+  const MistralAILlmControllerRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) =>

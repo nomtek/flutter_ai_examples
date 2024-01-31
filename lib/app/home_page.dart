@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
             ListTile(
               title: const Text('MistralAI LLM Controller example'),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () => const MistralAiLlmControllerRoute().go(context),
+              onTap: () => const MistralAILlmControllerRoute().go(context),
             ),
           ],
         ),
