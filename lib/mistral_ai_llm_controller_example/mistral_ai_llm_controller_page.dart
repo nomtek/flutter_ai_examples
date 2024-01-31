@@ -55,7 +55,7 @@ class _MistralAiLlmControllerPageState
           ChatMessage(
             role: 'system',
             content: controllerContext(
-              controllerFunctions,
+              availableFunctions,
               controllerSettings,
             ),
           ),
@@ -82,21 +82,23 @@ class _MistralAiLlmControllerPageState
       jsonDecode(filteredResponse) as Map<String, dynamic>,
     );
 
-    switch (controllerResponse.name) {
-      case ControllerFunctions.setTemperature:
+    final function = ControllerFunction.fromName(controllerResponse.name);
+
+    switch (function) {
+      case SetTemperatureFunction():
         setState(
           () => controllerSettings.temperature =
               double.parse(controllerResponse.parameters),
         );
-      case ControllerFunctions.setVolume:
+      case SetVolumeFunction():
         setState(
           () => controllerSettings.volume =
               double.parse(controllerResponse.parameters).toInt(),
         );
-      case ControllerFunctions.setColorOfLight:
+      case SetColorOfLightFunction():
         final color = getColorFromHex(controllerResponse.parameters);
         setState(() => controllerSettings.color = color);
-      case ControllerFunctions.turnOnTV:
+      case TurnOnTVFunction():
         setState(
           () => controllerSettings.isTVOn =
               bool.parse(controllerResponse.parameters),
@@ -198,7 +200,7 @@ class _MistralAiLlmControllerPageState
                           builder: (context) => LoggerDialog(
                             logger: '$controllerDescription\n'
                                 '${controllerContext(
-                              controllerFunctions,
+                              availableFunctions,
                               controllerSettings,
                             )}',
                             errorMessage: '',

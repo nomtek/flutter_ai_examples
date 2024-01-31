@@ -37,52 +37,94 @@ class ControllerSettings {
   }
 }
 
-class ControllerFunctions {
-  static const String setTemperature = 'setTemperature';
-  static const String setVolume = 'setVolume';
-  static const String setColorOfLight = 'setColorOfLight';
-  static const String turnOnTV = 'turnOnTV';
-}
-
-class ControllerFunction {
+sealed class ControllerFunction {
   const ControllerFunction({
-    required this.definition,
+    required this.name,
+    required this.type,
     required this.example,
+    this.additionalInfo = '',
   });
 
-  final String definition;
+  factory ControllerFunction.fromName(String name) => switch (name) {
+        SetVolumeFunction.signature => const SetVolumeFunction(),
+        SetColorOfLightFunction.signature => const SetColorOfLightFunction(),
+        TurnOnTVFunction.signature => const TurnOnTVFunction(),
+        _ => const UnknownFunction()
+      };
+
+  String get definition => '$name (parameters:$type) $additionalInfo'.trim();
+
+  final String name;
+  final String type;
+  final String additionalInfo;
   final String example;
 }
 
-const List<ControllerFunction> controllerFunctions = [
-  ControllerFunction(
-    definition:
-        '${ControllerFunctions.setTemperature} (parameters:temperature:number)',
-    example: '''
+class SetTemperatureFunction extends ControllerFunction {
+  const SetTemperatureFunction()
+      : super(
+          name: signature,
+          type: 'temperature:number',
+          example: '''
 INPUT: "Set temperature to 17 degrees"
-RESULT: { "name": "${ControllerFunctions.setTemperature}", "parameters": "17" }
+RESULT: { "name": "$signature", "parameters": "17" }
     ''',
-  ),
-  ControllerFunction(
-    definition: '${ControllerFunctions.setVolume} (parameters:volume:number)',
-    example: '''
+        );
+  static const String signature = 'setTemperature';
+}
+
+class SetVolumeFunction extends ControllerFunction {
+  const SetVolumeFunction()
+      : super(
+          name: signature,
+          type: 'volume:number',
+          example: '''
 INPUT: "Set volume to 10"
-RESULT: { "name": "${ControllerFunctions.setVolume}", "parameters": "10" }
+RESULT: { "name": "$signature", "parameters": "10" }
     ''',
-  ),
-  ControllerFunction(
-    definition: '${ControllerFunctions.setColorOfLight} (parameters:color:hex) '
-        'returns color in hex format only (#RRGGBB)',
-    example: '''
-INPUT: "Set color of light to orange" 
-RESULT: { "name": "${ControllerFunctions.setColorOfLight}", "parameters": "#FFA500" }
+        );
+  static const String signature = 'setVolume';
+}
+
+class SetColorOfLightFunction extends ControllerFunction {
+  const SetColorOfLightFunction()
+      : super(
+          name: signature,
+          type: 'color:hex ',
+          additionalInfo: 'returns color in hex format only (#RRGGBB)',
+          example: '''
+INPUT: "Set color of light to orange"
+RESULT: { "name": "$signature", "parameters": "#FFA500" }
     ''',
-  ),
-  ControllerFunction(
-    definition: '${ControllerFunctions.turnOnTV} (parameters:bool)',
-    example: '''
-INPUT: "Turn on TV" 
-RESULT: { "name": "${ControllerFunctions.turnOnTV}", "parameters": "true" }
+        );
+  static const String signature = 'setColorOfLight';
+}
+
+class TurnOnTVFunction extends ControllerFunction {
+  const TurnOnTVFunction()
+      : super(
+          name: signature,
+          type: 'bool',
+          example: '''
+INPUT: "Turn on TV"
+RESULT: { "name": "$signature", "parameters": "true" }
     ''',
-  ),
+        );
+  static const String signature = 'turnOnTV';
+}
+
+class UnknownFunction extends ControllerFunction {
+  const UnknownFunction()
+      : super(
+          name: 'unknown',
+          type: '',
+          example: '',
+        );
+}
+
+const List<ControllerFunction> availableFunctions = [
+  SetTemperatureFunction(),
+  SetVolumeFunction(),
+  SetColorOfLightFunction(),
+  TurnOnTVFunction(),
 ];
