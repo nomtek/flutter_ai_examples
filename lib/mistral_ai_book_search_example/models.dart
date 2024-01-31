@@ -3,14 +3,30 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'models.g.dart';
 
-class SearchResult {
-  SearchResult(this.text, this.similarity);
+class Answer {
+  Answer({
+    required this.text,
+    required this.question,
+    required this.keywords,
+    required this.fragmentSimilarities,
+  });
 
+  final String text;
+  final String question;
+  final List<String> keywords;
+  final List<FragmentSimilarity> fragmentSimilarities;
+}
+
+class FragmentSimilarity {
+  FragmentSimilarity(this.fragmentIndex, this.text, this.similarity);
+
+  final int fragmentIndex;
   final String text;
   final double similarity;
 
   @override
-  String toString() => 'SearchResult(text: $text, similarity: $similarity)';
+  String toString() =>
+      'FragmentSimilarity(text: $text, similarity: $similarity)';
 }
 
 @JsonSerializable()

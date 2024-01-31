@@ -30,3 +30,9 @@ Embedding are generated with [mistral client](https://pub.dev/packages/mistralai
 
 To generate new data for search use [prepare data script](prepare_data.dart).
 Inside just change the file name you want to generate new data for.
+
+## Prompts and embeddings
+
+TODO:
+- write about embeddings and why we calculate the embedding based on question and keywords
+- describe why prompts are looking the way they are
