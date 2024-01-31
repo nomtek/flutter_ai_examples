@@ -51,13 +51,14 @@ class _MistralAiLlmControllerPageState
       ChatParams(
         model: 'mistral-medium',
         messages: [
+          ChatMessage(role: 'system', content: controllerDescription),
           ChatMessage(
             role: 'system',
-            content: controllerDescription(
+            content: controllerContext(
+              controllerFunctions,
               controllerSettings,
             ),
           ),
-          const ChatMessage(role: 'system', content: controllerExample),
           ChatMessage(role: 'user', content: command),
         ],
       ),
@@ -78,7 +79,8 @@ class _MistralAiLlmControllerPageState
       return;
     }
     final controllerResponse = ControllerResponse.fromJson(
-        jsonDecode(filteredResponse) as Map<String, dynamic>);
+      jsonDecode(filteredResponse) as Map<String, dynamic>,
+    );
 
     switch (controllerResponse.name) {
       case ControllerFunctions.setTemperature:
@@ -187,15 +189,35 @@ class _MistralAiLlmControllerPageState
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  ElevatedButton(
-                    onPressed: () => showDialog<void>(
-                      context: context,
-                      builder: (context) => LoggerDialog(
-                        logger: logger,
-                        errorMessage: errorMessage,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => showDialog<void>(
+                          context: context,
+                          builder: (context) => LoggerDialog(
+                            logger: '$controllerDescription\n'
+                                '${controllerContext(
+                              controllerFunctions,
+                              controllerSettings,
+                            )}',
+                            errorMessage: '',
+                          ),
+                        ),
+                        child: const Text('AI instruction'),
                       ),
-                    ),
-                    child: const Text('Logger'),
+                      const SizedBox(width: 16),
+                      ElevatedButton(
+                        onPressed: () => showDialog<void>(
+                          context: context,
+                          builder: (context) => LoggerDialog(
+                            logger: logger,
+                            errorMessage: errorMessage,
+                          ),
+                        ),
+                        child: const Text('Logger'),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 16),
                   TextField(
