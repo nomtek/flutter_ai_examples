@@ -1,7 +1,0 @@
-{
-  "@@locale": "en",
-  "summaryPageTitle": "MistralAI Summary",
-  "@summaryPageTitle": {
-    "description": "Title of the Mistral AI summary page"
-  }
-}

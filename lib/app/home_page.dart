@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/app/router.dart';
-import 'package:mistral_ai_chat_example_app/l10n/l10n.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,7 +13,7 @@ class HomePage extends StatelessWidget {
               onTap: () => const MistralAIChatRoute().go(context),
             ),
             ListTile(
-              title: Text(context.l10n.summaryPageTitle),
+              title: const Text('MistralAI Summary example'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => const MistralAISummaryRoute().go(context),
             ),

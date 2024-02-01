@@ -13,10 +13,7 @@ dependencies:
   collection: ^1.18.0
   flutter:
     sdk: flutter
-  flutter_localizations:
-    sdk: flutter
   go_router: ^13.0.1
-  intl: any
   json_annotation: ^4.8.1
   langchain: ^0.4.0
   mistralai_client_dart: 0.0.2
