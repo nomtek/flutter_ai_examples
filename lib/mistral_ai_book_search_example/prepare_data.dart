@@ -13,7 +13,7 @@ const String mistralAIApiKey = String.fromEnvironment('MISTRAL_AI_API_KEY');
 final mistralAIClient = MistralAIClient(apiKey: mistralAIApiKey);
 
 // use this command to run this file from the root of the project:
-// dart run --define=MISTRAL_AI_API_KEY=YourAPIKey lib/mistral_ai_book_search_example/large_text_search_data_prepare.dart
+// dart run --define=MISTRAL_AI_API_KEY=YourAPIKey lib/mistral_ai_book_search_example/prepare_data.dart
 void main() async {
   final mainStopWatch = Stopwatch()..start();
   const fileName = '20k_leages_under_the_sea_verne';
