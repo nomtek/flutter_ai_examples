@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:langchain/langchain.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/models.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/text_chunk_splitter.dart';
 import 'package:mistral_ai_chat_example_app/mistral_tokenizer/mistral_tokenizer.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
@@ -83,7 +83,7 @@ Future<SearchData> prepareSearchData(
 
   await timedOperation('Load text file and split to fragments', () async {
     final bookText = await textFile.readAsString();
-    final splitter = TextToChunkSplitter();
+    final splitter = TextToFragmentSplitter();
     final splittedText = splitter.split(bookText);
     if (processFirstNFragments != null) {
       fragments = splittedText.take(processFirstNFragments).toList();
@@ -180,5 +180,21 @@ void checkLengths(List<List<dynamic>> lists) {
     if (list.length != length) {
       throw Exception('Lists must have the same length');
     }
+  }
+}
+
+/// splits text into smaller chunks
+class TextToFragmentSplitter {
+  List<String> split(
+    String text, {
+    int chunkSize = 1000,
+    int chunkOverlap = 100,
+  }) {
+    final textSplitter = RecursiveCharacterTextSplitter(
+      chunkSize: chunkSize,
+      chunkOverlap: chunkOverlap,
+    );
+    final splitText = textSplitter.splitText(text);
+    return splitText;
   }
 }
