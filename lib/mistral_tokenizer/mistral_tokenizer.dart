@@ -22,8 +22,8 @@ library;
 
 import 'dart:convert';
 
+import 'package:characters/characters.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 
 part 'merges_binary.dart';
 part 'vocab_base64.dart';
@@ -103,6 +103,11 @@ List<String> decodeVocabulary({String vocabularyInBase64 = vocabBase64}) {
   return utf8.decode(base64.decode(vocabularyInBase64)).split('\n');
 }
 
+// Converts text to tokens. 
+// The exact tokens depend on the vocabulary used.
+// The resulting tokens can differ from the tokens that are used by Mistral AI.
+//
+// It's best to not depend on the exact length of the resulting tokens.
 class MistralTokenizer {
   MistralTokenizer(this.vocabById, this.vocabByString, this.merges);
 
@@ -149,7 +154,6 @@ class MistralTokenizer {
 
     // space is represented by "▁" (thick underscore, id 28705)
     promptAltered = promptAltered.replaceAll(' ', _thickUnderscore);
-
     final chars = promptAltered.characters;
     for (var i = 0; i < chars.length; i++) {
       final char = chars.elementAt(i);
@@ -170,7 +174,7 @@ class MistralTokenizer {
             //
             // if it does happen, let's follow the js implementation
             // and add <UNK> token instead of crash
-            debugPrint(
+            _log(
               'Encountered unknown character: $char '
               '(partial utf8 byte $utf8Byte, hex: ${_utf8ByteToHex(utf8Byte)})',
             );
@@ -351,6 +355,12 @@ class MistralTokenizer {
     final strippedHex = hex.replaceAll(RegExp('<0x|>'), '');
     return int.parse(strippedHex, radix: 16);
   }
+}
+
+// log function for debugging and making lint happy
+void _log(String message) {
+  // ignore: avoid_print
+  print(message);
 }
 
 class TokenNode {

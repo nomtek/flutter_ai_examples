@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mistral_ai_chat_example_app/l10n/l10n.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/summary_settings_page.dart';
@@ -59,7 +58,7 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.summaryPageTitle),
+        title: const Text('MistralAI Summary'),
         actions: [
           IconButton(
             onPressed: () async {
