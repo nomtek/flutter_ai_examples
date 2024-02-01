@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/book_text_search.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/book_search.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/models.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_chat_example/mistral_client.dart';
 import 'package:mistral_ai_chat_example_app/mistral_tokenizer/mistral_tokenizer.dart';
