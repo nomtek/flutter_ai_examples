@@ -186,6 +186,7 @@ class _SearchFormState extends State<SearchForm> {
   }
 }
 
+// display list of fragments most relevant to the question
 class FragmentSimilarityList extends StatelessWidget {
   const FragmentSimilarityList({required this.similarities, super.key});
 
