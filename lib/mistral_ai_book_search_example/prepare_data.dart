@@ -110,7 +110,10 @@ Future<SearchData> prepareSearchData(
   // batch size value from error message of MistralAI API
   final fragmentsBatches = <List<String>>[];
   timedOperationSync('Batches for embeddings creation', () {
-    const batchSize = 16384;
+    // max token size handled by API is 16384
+    // but we use a smaller value to have a margin in case
+    // our tokenizer returns different number of tokens for the same text
+    const batchSize = 15000;
     var batchCurrentSize = 0;
     var batch = <String>[];
     var i = 0;

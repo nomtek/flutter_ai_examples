@@ -103,6 +103,11 @@ List<String> decodeVocabulary({String vocabularyInBase64 = vocabBase64}) {
   return utf8.decode(base64.decode(vocabularyInBase64)).split('\n');
 }
 
+// Converts text to tokens. 
+// The exact tokens depend on the vocabulary used.
+// The resulting tokens can differ from the tokens that are used by Mistral AI.
+//
+// It's best to not depend on the exact length of the resulting tokens.
 class MistralTokenizer {
   MistralTokenizer(this.vocabById, this.vocabByString, this.merges);
 
