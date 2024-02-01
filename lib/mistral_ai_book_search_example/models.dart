@@ -1,4 +1,3 @@
-// keeps information about a fragment of text and it's embeddings
 import 'package:json_annotation/json_annotation.dart';
 
 part 'models.g.dart';
