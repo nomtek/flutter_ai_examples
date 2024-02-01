@@ -174,7 +174,7 @@ class MistralTokenizer {
             //
             // if it does happen, let's follow the js implementation
             // and add <UNK> token instead of crash
-            print(
+            _log(
               'Encountered unknown character: $char '
               '(partial utf8 byte $utf8Byte, hex: ${_utf8ByteToHex(utf8Byte)})',
             );
@@ -355,6 +355,12 @@ class MistralTokenizer {
     final strippedHex = hex.replaceAll(RegExp('<0x|>'), '');
     return int.parse(strippedHex, radix: 16);
   }
+}
+
+// log function for debugging and making lint happy
+void _log(String message) {
+  // ignore: avoid_print
+  print(message);
 }
 
 class TokenNode {
