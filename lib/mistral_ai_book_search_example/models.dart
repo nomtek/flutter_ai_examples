@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'models.g.dart';
 
+// answer to the question about the book
 class Answer {
   Answer({
     required this.text,
@@ -29,6 +30,7 @@ class FragmentSimilarity {
       'FragmentSimilarity(text: $text, similarity: $similarity)';
 }
 
+// keeps information about the book that is used for searching
 @JsonSerializable()
 class SearchData {
   SearchData(this.fragments, this.fragmentTokens, this.fragmentEmbeddings);
