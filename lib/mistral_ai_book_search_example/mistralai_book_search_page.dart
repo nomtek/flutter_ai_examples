@@ -42,19 +42,7 @@ class _Body extends StatelessWidget {
             body = const SearchForm();
             actions.add(
               IconButton(
-                onPressed: () {
-                  showDialog<void>(
-                    context: context,
-                    builder: (_) {
-                      return Provider.value(
-                        value: context.read<BookSearch>(),
-                        builder: (_, __) {
-                          return const Dialog(child: BookFragmentsList());
-                        },
-                      );
-                    },
-                  );
-                },
+                onPressed: () => showBookFragments(context),
                 icon: const Icon(Icons.book),
               ),
             );
@@ -71,6 +59,23 @@ class _Body extends StatelessWidget {
             actions: actions,
           ),
           body: body,
+        );
+      },
+    );
+  }
+
+  // display dialog with the whole book text divided into fragments
+  Future<void> showBookFragments(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (_) {
+        return Provider.value(
+          // it's important to read the value from outside context
+          // and not the builder context
+          value: context.read<BookSearch>(),
+          builder: (_, __) {
+            return const Dialog(child: BookFragmentsList());
+          },
         );
       },
     );
@@ -94,7 +99,7 @@ class _SearchFormState extends State<SearchForm> {
       children: [
         Align(
           child: Text(
-            'Twenty Thousand Leagues Under the Sea',
+            context.read<BookSearch>().bookTitle,
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
@@ -104,7 +109,7 @@ class _SearchFormState extends State<SearchForm> {
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Ask question about book...',
-              icon: Icon(Icons.search),
+              prefixIcon: Icon(Icons.search),
             ),
             onSubmitted: search,
           ),
@@ -203,7 +208,7 @@ class FragmentSimilarityList extends StatelessWidget {
           leading: CircleAvatar(child: Text('${item.fragmentIndex + 1}')),
           title: Text(fragment),
           subtitle: Text(
-            'similarity question: $similarity, length: $fragmentTextLength',
+            'Similarity to question: $similarity, length: $fragmentTextLength',
           ),
         );
       },
@@ -233,7 +238,7 @@ class BookFragmentsList extends StatelessWidget {
           leading: CircleAvatar(child: Text('${index + 1}')),
           title: Text(fragments[index]),
           subtitle: Text(
-            'length: $fragmentTextLength, tokens: ${tokens[index].length}',
+            'Text length: $fragmentTextLength, tokens: ${tokens[index].length}',
           ),
         );
       },
