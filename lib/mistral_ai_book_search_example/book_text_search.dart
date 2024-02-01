@@ -98,45 +98,54 @@ Return the answer as a plain text.
   //  and ask AI to create keywords from it
   // step 2: Search for fragments with keywords
   // step 3: Take fragments and ask AI to answer original question
-  //
   Future<Answer> findAnswer(
     String question, {
     // max number of fragments to use for answer
     int resultCount = 5,
   }) async {
     final keywords = await _createKeywordsFromQuestion(question);
-    final keywordsQuery = keywords.join(' ');
-    debugPrint('keywords: $keywordsQuery');
-    // TODO write why question + query
-    final queryEmbedding = await _getEmbedding('$question $keywordsQuery');
-    final results = <FragmentSimilarity>[];
+    final keywordsString = keywords.join(' ');
+    debugPrint('keywords: $keywordsString');
+    // Get embedding for question + keywords.
+    // Keywords are added to the question to help AI
+    // find most relevant fragments. To make a stronger connection
+    // between question and keywords we add them to the question.
+    //
+    // This will be used to find the most similar fragments
+    // to the question
+    // (we use the same embedding model as for the book fragments).
+    //
+    // Later on we will use found fragments to answer the question using AI.
+    final questionEmbedding = await _getEmbedding('$question $keywordsString');
+    final fragmentToQuestionSimilarities = <FragmentSimilarity>[];
     for (var i = 0; i < _searchData.fragments.length; i++) {
-      final embedding = _searchData.fragmentEmbeddings[i];
+      final fragmentEmbedding = _searchData.fragmentEmbeddings[i];
       final similarity = calculateCosineSimilarity(
-        queryEmbedding,
-        embedding,
+        questionEmbedding,
+        fragmentEmbedding,
       );
-      results.add(
+      fragmentToQuestionSimilarities.add(
         FragmentSimilarity(i, _searchData.fragments[i], similarity),
       );
     }
-    final sortedResults = results
+    // sort by similarity descending
+    final sortedSimilarities = fragmentToQuestionSimilarities
       ..sort((a, b) => b.similarity.compareTo(a.similarity));
-    final similarities = sortedResults
-        .take(resultCount)
-        .toList();
-    final questionFragments = similarities.map((e) => e.text).toList();
+    final mostRelevantSimilarities =
+        sortedSimilarities.take(resultCount).toList();
+    final mostRelevantFragments =
+        mostRelevantSimilarities.map((e) => e.text).toList();
     final answer = await _getAnswerToQuestion(
       userQuestion: question,
       keywordsFromQuestion: keywords,
-      fragments: questionFragments,
+      fragments: mostRelevantFragments,
     );
 
     return Answer(
       text: answer,
       question: question,
       keywords: keywords,
-      fragmentSimilarities: similarities,
+      fragmentSimilarities: mostRelevantSimilarities,
     );
   }
 
@@ -144,7 +153,7 @@ Return the answer as a plain text.
     final queryEmbedding = await mistralAIClient
         .embeddings(EmbeddingParams(model: 'mistral-embed', input: [text]));
     if (queryEmbedding.data.isEmpty) {
-      throw Exception('No embedding found for query: $text');
+      throw Exception('No embedding found for text: $text');
     }
     return queryEmbedding.data.first.embedding;
   }
