@@ -61,7 +61,7 @@ To use different the book you need to:
 
 - add your book in `.txt` to [assets](../../assets) folder
 - run [prepare data script](prepare_data.dart) with your book name (check class comments on how to run it)
-  - this will generate new data for your book in [assets](../../assets) folder 
+  - this will generate new data for your book in [assets](../../assets) folder
   - generated file will be named `your_book_name.json` if your book file is `your_book_name.txt`
 - update [BookSearch](book_search.dart) with your book information
   - change `bookTitle` property to your book title
@@ -100,11 +100,11 @@ Do not explain anything.
 Let's break it down:
 
 - `You are a helpful assistant designed to create keywords from a question. The keywords are used to search for the answer in the book.` - this is used to help AI chatbot understand what we are looking for
-- `Return the keywords in a list of strings: ["keyword1", "keyword2", ...]` - this is used to help AI chatbot understand what is the expected format of keywords
-- `Do not return anything else than list.` - this is used to make sure that AI chatbot will not return anything else than list of keywords
+- `Return the keywords in a list of strings: ["keyword1", "keyword2", ...]` - this is used to help AI chatbot understand what is the expected format of keywords in form of JSON list
+- `Do not return anything else than list.` - Many times AI chatbot will try to return some additional information that is not needed. We try to add more context to output to make sure we get only what we need. Ofc this is not always working as expected. And we still are use regex to extract keywords from the output.
 - `Do not explain anything.` - this is used to make sure that AI chatbot will not explain anything (this happens sometimes when AI chatbot is not sure about the answer)
 
-Important thing to note is that we are not specifying what is the book title. We are only specifying that we are looking for keywords from question about some book. 
+Important thing to note is that we are not specifying what is the book title. We are only specifying that we are looking for keywords from question about some book.
 This is not to give AI chatbot any hints about the book title and to make sure that it will not use book title to generate keywords.
 Focus here is put on the question about the book, not the book itself.
 
@@ -126,7 +126,7 @@ Let's break it down:
 
 - `You are a helpful assistant designed to answer questions from a book.` - this is used to help AI chatbot understand what we are looking for
 - `You are given list of book fragments related to the question.` - this is used to help AI chatbot understand what is the input
-- `Use knowledge only from given fragments to answer the question.` - this is used to help AI chatbot understand how to use the input to get the answer and prevent it from using any other knowledge
+- `Use knowledge only from given fragments to answer the question.` - this is used to help AI chatbot understand how to use the input to get the answer and prevent it from using any other knowledge (trained data).
 - `Here are some keywords related to question: ${keywordsFromQuestion.join(', ')}.` - this is used to add additional context to AI chatbot about keywords that are related to question. Keywords were used to calculate similarity between question and book fragments
 
 ### How to improve answers?
