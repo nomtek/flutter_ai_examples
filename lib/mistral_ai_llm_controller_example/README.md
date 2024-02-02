@@ -64,13 +64,13 @@ Let's break it down:
 You are a helpful assistant designed to output only JSON.
 ```
 
-This is used to tell AI chatbot that we are looking for JSON output.
+It is important to tell AI chatbot that we are looking for JSON output.
 
 ```text
 Interpret commands based on their intent and map them to the appropriate function.
 ```
 
-This is used to tell AI chatbot his general purpose
+It is the main instruction for AI chatbot.
 
 ```text
 For direct commands, choose the corresponding function.
@@ -78,13 +78,13 @@ For indirect commands, infer the intent and select the most relevant function.
 If a command is unrecognized, return the following JSON: { "name": "unknown", "parameters": "" }  
 ```
 
-This is used to tell AI chatbot how to interpret commands and what to do if command is not recognized.
+This is used to tell the AI chatbot how to interpret commands and what to do if the command is not recognized. It is important to return an unknown function name when the command is not recognized without that, AI will use one of the available functions.
 
 ```text
 You can perform one function at a time.
 ```
 
-This is used to tell AI chatbot that we are looking for one function at a time.
+This is an extension of the instructions for AI chatbot that specifies how the output should look like.
 
 ```text
 Do not return anything else than JSON.
@@ -95,7 +95,7 @@ This is used to tell AI chatbot that we are looking for JSON output and that we 
 
 ### Controller context
 
-It defines the current state of the controller, contains the available functions and examples of commands anr expected responses.
+It defines the current state of the controller and contains the available functions and examples of commands and expected responses.
 
 ```text
 #####Current settings: 
@@ -123,4 +123,4 @@ RESULT: { "name": "turnOnTV", "parameters": "true" }
 
 ## Problems and difficulties  
 
-An LLM does very well for direct commands, but it has problems with indirect commands. For example, if we ask the LLM to "turn on the TV", it will do what we expect, but when we tell the LLM "I am bored, play something", it will not know that turning on the TV might help. Posable solution is to use a more example-based approach, where we would have to provide more examples of indirect commands. Downside of this approach is that we would increase the size of the prompt which would increase the cost of the request.
+An LLM does very well for direct commands but has problems with indirect commands. For example, if we ask the LLM to "turn on the TV", it will do what we expect, but when we tell the LLM "I am bored, play something", it will not know that turning on the TV might help. A possible solution is to use a more example-based approach, where we would have to provide more examples of indirect commands. The downside of this approach is that we would increase the size of the prompt which would increase the cost of the request.
