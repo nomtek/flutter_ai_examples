@@ -1,20 +1,22 @@
-## Mistral AI Chat example
+# Mistral AI Chat example
 
 This is an example of AI chat similar to OpenAI's ChatGPT but using Mistral AI model.
 
 Example is using [mistralai_client_dart](https://pub.dev/packages/mistralai_client_dart) to access Mistral model using REST API.
 
-### Features
+<https://github.com/nomtek/flutter_ai_examples/assets/2642942/d349d8e3-15bf-4773-86ff-77b333630588>
+
+## Features
 
 1. Remembers the chat history
 2. Option to change between streaming and full response mode
 
-### How to open example
+## How to open example
 
 Follow instruction on how to run example app from [projects README.md](../../README.md).
 When app is running go to `MistralAI Chat example` page.
 
-### How it works?
+## How it works?
 
 Using `MistralAIClient` we request chat responses from API.
 
@@ -27,6 +29,7 @@ So for AI to have a context of the chat we are keeping the history of the chat (
 For example:
 
 This is what will be send when user sends first message.
+
 ```dart
 final params = ChatParams(
     model: 'mistral-small',
@@ -38,11 +41,13 @@ mistralAIClient.chat(params);
 ```
 
 Then we get a response like (omitting the exact code and model for chat response):
+
 ```text
 Hey how can I help you today?
 ```
 
 So next time user sends a message we will send now a chat like this:
+
 ```dart
 final params = ChatParams(
     model: 'mistral-small',
@@ -57,8 +62,7 @@ mistralAIClient.chat(params);
 
 Basically every time we are doing back and forth with response and answer send back to the API. The whole conversation context is kept. This is required to be able for AI to answer question about previous questions or answers that happened during chat.
 
-
-### Room for improvements
+## Room for improvements
 
 The example is a simple example and showcase how chat can be built. There are few things that can be improved to make it more real world.
 
