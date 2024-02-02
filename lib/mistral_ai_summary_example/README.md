@@ -71,4 +71,4 @@ Those are more detailed instructions for the AI. Telling it may help the AI to g
 
 ## Problems and difficulties
 
-Despite detailed instructions, the AI sometimes generates summaries that are too long specialty for the small models.
+Despite detailed instructions, the AI sometimes generates summaries that are too long specialty for the small models. Possible solution is to improve the prompt and the instructions for the AI.
