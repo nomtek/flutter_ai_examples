@@ -7,7 +7,7 @@ Example app showcasing the Mistral AI chat client.
 ### Install dependencies
 
 ```shell
-dart pub get
+flutter pub get
 ```
 
 ### Generate code
