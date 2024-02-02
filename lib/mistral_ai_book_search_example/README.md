@@ -61,7 +61,7 @@ To use different the book you need to:
 
 - add your book in `.txt` to [assets](../../assets) folder
 - run [prepare data script](prepare_data.dart) with your book name (check class comments on how to run it)
-  - this will generate new data for your book in [assets](../../assets) folder 
+  - this will generate new data for your book in [assets](../../assets) folder
   - generated file will be named `your_book_name.json` if your book file is `your_book_name.txt`
 - update [BookSearch](book_search.dart) with your book information
   - change `bookTitle` property to your book title
@@ -104,7 +104,7 @@ Let's break it down:
 - `Do not return anything else than list.` - this is used to make sure that AI chatbot will not return anything else than list of keywords
 - `Do not explain anything.` - this is used to make sure that AI chatbot will not explain anything (this happens sometimes when AI chatbot is not sure about the answer)
 
-Important thing to note is that we are not specifying what is the book title. We are only specifying that we are looking for keywords from question about some book. 
+Important thing to note is that we are not specifying what is the book title. We are only specifying that we are looking for keywords from question about some book.
 This is not to give AI chatbot any hints about the book title and to make sure that it will not use book title to generate keywords.
 Focus here is put on the question about the book, not the book itself.
 
