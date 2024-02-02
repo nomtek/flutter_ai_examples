@@ -5,7 +5,7 @@ import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/lo
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/model.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/prompt.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/utils.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistral_client.dart';
+import 'package:mistral_ai_chat_example_app/mistral_client/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
 class MistralAILlmControllerPage extends StatefulWidget {

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/book_search.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/models.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_chat_example/mistral_client.dart';
+import 'package:mistral_ai_chat_example_app/mistral_client/mistral_client.dart';
 import 'package:mistral_ai_chat_example_app/mistral_tokenizer/mistral_tokenizer.dart';
 import 'package:provider/provider.dart';
-
-final mistralTokenizer = MistralTokenizer.fromBase64();
 
 class MistralAIBookSearchPage extends StatelessWidget {
   const MistralAIBookSearchPage({super.key});
