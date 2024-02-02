@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/algebra.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/models.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_chat_example/mistral_client.dart';
+import 'package:mistral_ai_chat_example_app/mistral_client/mistral_client.dart';
 import 'package:mistral_ai_chat_example_app/mistral_tokenizer/mistral_tokenizer.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 

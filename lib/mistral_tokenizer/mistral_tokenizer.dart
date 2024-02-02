@@ -28,82 +28,10 @@ import 'package:collection/collection.dart';
 part 'merges_binary.dart';
 part 'vocab_base64.dart';
 
-Map<String, int> decompressMerges({
-  required List<String> vocabById,
-  String mergesBinaryInBase64 = mergesBinary,
-}) {
-  // decode base64
-  final byteArray = base64.decode(mergesBinaryInBase64);
+// instance of the tokenizer to be used in the app
+final mistralTokenizer = MistralTokenizer.fromBase64();
 
-  // Each byte-pair represents a tokenId.
-  // Convert byte-pairs to tokenIds (integers between 0 and 32000).
-  final tokenIds = <int>[];
-  for (var i = 0; i < byteArray.length; i += 2) {
-    final byte1 = byteArray[i];
-    final byte2 = byteArray[i + 1];
-    final tokenId = byte1 + (byte2 << 8);
-    tokenIds.add(tokenId);
-  }
-
-  String getMergeIdString(int tokenId1, int tokenId2) {
-    return getMergeIdStringFromVocabulary(vocabById, tokenId1, tokenId2);
-  }
-
-  // Each pair of tokenIds represents a merge.
-  final merges = <String, int>{};
-  for (var i = 0; i < tokenIds.length; i += 2) {
-    final tokenId1 = tokenIds[i];
-    final tokenId2 = tokenIds[i + 1];
-    final mergeIdString = getMergeIdString(tokenId1, tokenId2);
-    merges[mergeIdString] = i + 1;
-  }
-
-  return merges;
-}
-
-String getMergeIdStringFromVocabulary(
-  List<String> vocabById,
-  int tokenId1,
-  int tokenId2,
-) =>
-    '${vocabById[tokenId1]} ${vocabById[tokenId2]}';
-
-/// Helper function to decode the vocabulary.
-///
-/// vocab_base64 is base64-encoded string of tokens delimited by '\n'
-/// (line break) in utf-8.
-/// The row number of the token (indexing from 0) represents the id
-/// of the token in mistral tokenizer.
-///
-/// Most tokens look like this: "ic" (without the quotes)
-/// (representing the "i" character followed by the "c" character)
-/// Some tokens are special. In particular, spaces are replaced with
-/// the "▁" character and line-break is represented as "<0x0A>".
-///
-/// This helper function returns the vocabulary as an array that
-/// contains Strings representing tokens:
-///
-///  ```pre
-///  "<unk>"   // Special token: unknown token
-///  "<s>"     // Special token: beginning of string
-///  "</s>"    // Special token: end of string
-///  "<0x00>"  // Byte-level token representing the 0-byte
-///  "<0x01>"  // Byte-level token ...
-///  "<0x02>"  // Byte-level token ...
-///  ...       // More byte-level tokens
-///  "<0x0A>"  // Byte-level token representing '\n' (line break). This is one of the few byte-level tokens that appear to be actually needed in practice.
-///  ...       // More byte-level tokens
-///  "<0xFF>"  // Byte-level token ...
-///  "▁▁"     // Token representing 2 consecutive spaces.
-///  "▁t"     // Token representing the space character followed by the "t" character.
-///  "er"      // Token representing the "e" character followed by the "r" character. Most tokens look like this.
-///  ...       // 32000 tokens
-///  ```
-List<String> decodeVocabulary({String vocabularyInBase64 = vocabBase64}) {
-  return utf8.decode(base64.decode(vocabularyInBase64)).split('\n');
-}
-
-// Converts text to tokens. 
+// Converts text to tokens.
 // The exact tokens depend on the vocabulary used.
 // The resulting tokens can differ from the tokens that are used by Mistral AI.
 //
@@ -357,10 +285,80 @@ class MistralTokenizer {
   }
 }
 
-// log function for debugging and making lint happy
-void _log(String message) {
-  // ignore: avoid_print
-  print(message);
+/// Decompresses merges data from a base64-encoded string.
+Map<String, int> decompressMerges({
+  required List<String> vocabById,
+  String mergesBinaryInBase64 = mergesBinary,
+}) {
+  // decode base64
+  final byteArray = base64.decode(mergesBinaryInBase64);
+
+  // Each byte-pair represents a tokenId.
+  // Convert byte-pairs to tokenIds (integers between 0 and 32000).
+  final tokenIds = <int>[];
+  for (var i = 0; i < byteArray.length; i += 2) {
+    final byte1 = byteArray[i];
+    final byte2 = byteArray[i + 1];
+    final tokenId = byte1 + (byte2 << 8);
+    tokenIds.add(tokenId);
+  }
+
+  String getMergeIdString(int tokenId1, int tokenId2) {
+    return getMergeIdStringFromVocabulary(vocabById, tokenId1, tokenId2);
+  }
+
+  // Each pair of tokenIds represents a merge.
+  final merges = <String, int>{};
+  for (var i = 0; i < tokenIds.length; i += 2) {
+    final tokenId1 = tokenIds[i];
+    final tokenId2 = tokenIds[i + 1];
+    final mergeIdString = getMergeIdString(tokenId1, tokenId2);
+    merges[mergeIdString] = i + 1;
+  }
+
+  return merges;
+}
+
+String getMergeIdStringFromVocabulary(
+  List<String> vocabById,
+  int tokenId1,
+  int tokenId2,
+) =>
+    '${vocabById[tokenId1]} ${vocabById[tokenId2]}';
+
+/// Helper function to decode the vocabulary.
+///
+/// vocab_base64 is base64-encoded string of tokens delimited by '\n'
+/// (line break) in utf-8.
+/// The row number of the token (indexing from 0) represents the id
+/// of the token in mistral tokenizer.
+///
+/// Most tokens look like this: "ic" (without the quotes)
+/// (representing the "i" character followed by the "c" character)
+/// Some tokens are special. In particular, spaces are replaced with
+/// the "▁" character and line-break is represented as "<0x0A>".
+///
+/// This helper function returns the vocabulary as an array that
+/// contains Strings representing tokens:
+///
+///  ```pre
+///  "<unk>"   // Special token: unknown token
+///  "<s>"     // Special token: beginning of string
+///  "</s>"    // Special token: end of string
+///  "<0x00>"  // Byte-level token representing the 0-byte
+///  "<0x01>"  // Byte-level token ...
+///  "<0x02>"  // Byte-level token ...
+///  ...       // More byte-level tokens
+///  "<0x0A>"  // Byte-level token representing '\n' (line break). This is one of the few byte-level tokens that appear to be actually needed in practice.
+///  ...       // More byte-level tokens
+///  "<0xFF>"  // Byte-level token ...
+///  "▁▁"     // Token representing 2 consecutive spaces.
+///  "▁t"     // Token representing the space character followed by the "t" character.
+///  "er"      // Token representing the "e" character followed by the "r" character. Most tokens look like this.
+///  ...       // 32000 tokens
+///  ```
+List<String> decodeVocabulary({String vocabularyInBase64 = vocabBase64}) {
+  return utf8.decode(base64.decode(vocabularyInBase64)).split('\n');
 }
 
 class TokenNode {
@@ -382,4 +380,10 @@ class TokenNode {
 
   TokenNode? prev;
   TokenNode? next;
+}
+
+// log function for debugging and making lint happy
+void _log(String message) {
+  // ignore: avoid_print
+  print(message);
 }

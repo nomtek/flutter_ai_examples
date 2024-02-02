@@ -6,17 +6,25 @@ import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/model
 import 'package:mistral_ai_chat_example_app/mistral_tokenizer/mistral_tokenizer.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
+// tokenizer and client are here to be sure the script
+// can be used as a standalone script
+
 final mistralTokenizer = MistralTokenizer.fromBase64();
 
 const String mistralAIApiKey = String.fromEnvironment('MISTRAL_AI_API_KEY');
 
 final mistralAIClient = MistralAIClient(apiKey: mistralAIApiKey);
 
-// use this command to run this file from the root of the project:
+// This file is supposed to be run from the root of the project
+// to generate data for book search example.
+//
+// Do not use this file in the app.
+//
+// Use this command to run this file from the root of the project:
 // dart run --define=MISTRAL_AI_API_KEY=YourAPIKey lib/mistral_ai_book_search_example/prepare_data.dart
-// 
-// to generate data for different book, change the fileName variable
-// and put the text file in assets folder
+//
+// To generate data for different book, change the fileName variable
+// and put the text file in assets folder.
 void main() async {
   final mainStopWatch = Stopwatch()..start();
   const fileName = '20k_leages_under_the_sea_verne';
