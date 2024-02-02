@@ -123,4 +123,4 @@ RESULT: { "name": "turnOnTV", "parameters": "true" }
 
 ## Problems and difficulties  
 
-An LLM does very well for direct commands, but it has problems with indirect commands. For example, if we ask the LLM to "turn on the TV", it will do what we expect, but when we tell the LLM "I am bored, play something", it will not know that turning on the TV might help.
+An LLM does very well for direct commands, but it has problems with indirect commands. For example, if we ask the LLM to "turn on the TV", it will do what we expect, but when we tell the LLM "I am bored, play something", it will not know that turning on the TV might help. Posable solution is to use a more example-based approach, where we would have to provide more examples of indirect commands. Downside of this approach is that we would increase the size of the prompt which would increase the cost of the request.
