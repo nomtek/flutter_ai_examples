@@ -1,6 +1,6 @@
 # mistral_ai_chat_example_app
 
-Example app showcasing the Mistral AI chat client app.
+Example app showcasing the Mistral AI chat client.
 
 ## Getting Started
 
@@ -16,41 +16,44 @@ dart pub get
 dart run build_runner build -d 
 ```
 
-### Setup Mistral AI api key
+### Setup Mistral AI API key
 
-1. Add `env.env` file in the root project
-2. Add `MISTRAL_AI_API_KEY=your api key` to the file.
+1. Open the `env.env` file in the root project
+2. Replace `your api key` with your Mistral AI API key.
 
-### Run example
+### Run the example app
 
-#### VS code
+#### Using the Visual Studio Code
 
-Just use ready to use [vscode configurations](.vscode/launch.json)
+We've prepared some ready to use [launch configurations](.vscode/launch.json) for VSC.
 
-#### Terminal
+In most cases, you should choose the regular `mistral_ai_chat_example_app` configuration.
+
+#### Using the terminal
+
+You can either use the `flutter run` command directly
 
 ```shell
 flutter run --dart-define-from-file=env.env
 ```
 
-or use script that contains above snippet
+or use a script that contains the above snippet
 
-**unix**
+**Linux/MacOS**
 ```shell
 ./tool/flutter_run.sh
 ```
 
-you can also pass parameters for `flutter run` command to the script
-```shell
-./tool/flutter_run.sh -d chrome
-```
-
-**windows**
+**Windows**
 ```shell
 tool\flutter_run.bat
 ```
 
-pass parameters to `flutter run` like this:
+You can pass parameters to the script by appending them at the end like this:
 ```shell
+// Linux/MacOS
+./tool/flutter_run.sh -d chrome
+
+// Windows
 tool\flutter_run.bat -d chrome
 ```
