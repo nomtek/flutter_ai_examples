@@ -7,8 +7,7 @@ Please provide a concise summary of the text:
 - Highlight the most important entities.
 - Should contain 4-5 sentences.
       
-Guidelines for generating summaries:
-- Each sentence should be:
+Guidelines for generating summaries, each sentence should be:
 - Relevant to the main story.
 - Avoid repetitive and uninformative phrases.
 - Truly present in the article.

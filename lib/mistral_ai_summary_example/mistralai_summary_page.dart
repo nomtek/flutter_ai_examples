@@ -33,7 +33,7 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
     try {
       final response = await mistralAIClient.chat(
         ChatParams(
-          model: 'mistral-small',
+          model: 'mistral-medium',
           temperature: summarySettings.temperature,
           topP: summarySettings.topP,
           randomSeed: summarySettings.randomSeed,
