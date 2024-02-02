@@ -43,139 +43,260 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // to long to put in one line
-    final temperatureStringValue =
-        summarySettings.temperature.toStringAsFixed(2);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                children: [
-                  ListTile(
-                    title: Text('Model: ${summarySettings.model.name}'),
-                    subtitle: DropdownButton<MistralAIModel>(
-                      value: summarySettings.model,
-                      onChanged: (MistralAIModel? newValue) {
-                        if (newValue == null) {
-                          return;
-                        }
-                        setState(() {
-                          summarySettings.model = newValue;
-                        });
-                      },
-                      items: MistralAIModel.values
-                          .map<DropdownMenuItem<MistralAIModel>>(
-                              (MistralAIModel model) {
-                        return DropdownMenuItem<MistralAIModel>(
-                          value: model,
-                          child: Text(model.name),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  ListTile(
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Temperature: $temperatureStringValue'),
-                        const Text(
-                          'We generally recommend altering '
-                          'this or Top P but not both.',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    subtitle: Slider(
-                      value: summarySettings.temperature,
-                      label: summarySettings.temperature.toStringAsFixed(2),
-                      onChanged: (value) => setState(
-                        () => summarySettings.temperature =
-                            double.parse(value.toStringAsFixed(2)),
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Top P: ${summarySettings.topP.toStringAsFixed(2)}',
-                        ),
-                        const Text(
-                          'We generally recommend altering '
-                          'this or Temperature but not both.',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    subtitle: Slider(
-                      value: summarySettings.topP,
-                      label: summarySettings.topP.toStringAsFixed(2),
-                      onChanged: (value) => setState(
-                        () => summarySettings.topP =
-                            double.parse(value.toStringAsFixed(2)),
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    title: Text('Max tokens: '
-                        '${summarySettings.maxTokens ?? 'unlimited'}'),
-                    subtitle: TextField(
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) => setState(
-                        () => summarySettings.maxTokens = int.tryParse(value),
-                      ),
-                      controller: maxTokensController,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Safe prompt: ${summarySettings.safePrompt}',
-                    ),
-                    trailing: Switch(
-                      value: summarySettings.safePrompt,
-                      onChanged: (value) =>
-                          setState(() => summarySettings.safePrompt = value),
-                    ),
-                  ),
-                  ListTile(
-                    title: Text('Random seed: '
-                        '${summarySettings.randomSeed ?? 'none'}'),
-                    subtitle: TextField(
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) => setState(
-                        () => summarySettings.randomSeed = int.tryParse(value),
-                      ),
-                      controller: randomSeedController,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ButtonBar(
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context, summarySettings);
-                  },
-                  child: const Text('Save'),
+                ModelSettingWidget(summarySettings: summarySettings),
+                const SettingsListSpacer(),
+                TemperatureAndTopPSettingWidget(
+                  temperature: summarySettings.temperature,
+                  topP: summarySettings.topP,
+                  onTemperatureChanged: (value) =>
+                      setState(() => summarySettings.temperature = value),
+                  onTopPChanged: (value) =>
+                      setState(() => summarySettings.topP = value),
+                ),
+                const SettingsListSpacer(),
+                MaxTokensSettingWidget(summarySettings: summarySettings),
+                const SettingsListSpacer(),
+                RandomSeedSettingWidget(summarySettings: summarySettings),
+                const SettingsListSpacer(),
+                SafePromptSettingWidget(
+                  settingValue: summarySettings.safePrompt,
+                  onChanged: (value) =>
+                      setState(() => summarySettings.safePrompt = value),
                 ),
               ],
             ),
+          ),
+          ButtonBar(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context, summarySettings);
+                },
+                child: const Text('Save'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ModelSettingWidget extends StatelessWidget {
+  const ModelSettingWidget({
+    required this.summarySettings,
+    super.key,
+  });
+
+  final SummarySettings summarySettings;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClickableSettingsItem(
+      settingName: 'Model',
+      settingValue: summarySettings.model.name,
+      onTap: () {},
+    );
+  }
+}
+
+class TemperatureAndTopPSettingWidget extends StatelessWidget {
+  const TemperatureAndTopPSettingWidget({
+    required this.temperature,
+    required this.topP,
+    required this.onTemperatureChanged,
+    required this.onTopPChanged,
+    super.key,
+  });
+  final double temperature;
+  final double topP;
+  final void Function(double) onTemperatureChanged;
+  final void Function(double) onTopPChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    // to long to put in one line
+    final temperatureStringValue = temperature.toStringAsFixed(2);
+
+    return ColoredBox(
+      color: Theme.of(context).highlightColor,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 28,
+          vertical: 16,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Temperature: $temperatureStringValue',
+                ),
+                Slider(
+                  value: temperature,
+                  label: temperature.toStringAsFixed(2),
+                  onChanged: onTemperatureChanged,
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Top P: $topP',
+                ),
+                Slider(
+                  value: topP,
+                  label: topP.toStringAsFixed(2),
+                  onChanged: onTopPChanged,
+                ),
+              ],
+            ),
+            const Text(
+              'We recommend altering only one, not both',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class MaxTokensSettingWidget extends StatelessWidget {
+  const MaxTokensSettingWidget({
+    required this.summarySettings,
+    super.key,
+  });
+
+  final SummarySettings summarySettings;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClickableSettingsItem(
+      settingName: 'Max tokens',
+      settingValue: summarySettings.maxTokens.toString(),
+      onTap: () {},
+    );
+  }
+}
+
+class RandomSeedSettingWidget extends StatelessWidget {
+  const RandomSeedSettingWidget({
+    required this.summarySettings,
+    super.key,
+  });
+
+  final SummarySettings summarySettings;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClickableSettingsItem(
+      settingName: 'Random seed',
+      settingValue: summarySettings.randomSeed.toString(),
+      onTap: () {},
+    );
+  }
+}
+
+class SafePromptSettingWidget extends StatelessWidget {
+  const SafePromptSettingWidget({
+    required this.settingValue,
+    required this.onChanged,
+    super.key,
+  });
+
+  final bool settingValue;
+  // ignore: avoid_positional_boolean_parameters
+  final void Function(bool) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: Theme.of(context).highlightColor,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 28,
+          vertical: 16,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Safe prompt: $settingValue',
+            ),
+            Switch(
+              value: settingValue,
+              onChanged: onChanged,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SettingsListSpacer extends StatelessWidget {
+  const SettingsListSpacer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(height: 24);
+  }
+}
+
+class ClickableSettingsItem extends StatelessWidget {
+  const ClickableSettingsItem({
+    required this.settingName,
+    required this.settingValue,
+    required this.onTap,
+    super.key,
+  });
+
+  final String settingName;
+  final String settingValue;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Material(
+        color: Theme.of(context).highlightColor,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 28,
+            vertical: 16,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                settingName,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              Text(
+                settingValue,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
+          ),
         ),
       ),
     );
