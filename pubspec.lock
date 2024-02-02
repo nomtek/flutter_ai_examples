@@ -400,6 +400,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.0"
+  material_symbols_icons:
+    dependency: "direct main"
+    description:
+      name: material_symbols_icons
+      sha256: "8ed0730abae4cd18fd2c084aba8fa4fcdc1cb66e3dd7af28dd3b4faf0cc7a4d5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2718.0"
   math_expressions:
     dependency: transitive
     description:

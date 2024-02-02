@@ -1,33 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:mistral_ai_chat_example_app/app/router.dart';
+import 'package:mistral_ai_chat_example_app/app/home_tiles.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: ListView(
-          children: [
-            ListTile(
-              title: const Text('MistralAI Chat example'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => const MistralAIChatRoute().go(context),
+  Widget build(BuildContext context) => const Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                HomeSectionTitle(sectionTitle: 'Mistral AI Examples'),
+                SizedBox(height: 16),
+                MistralExampleTilesGrid(),
+              ],
             ),
-            ListTile(
-              title: const Text('MistralAI Summary example'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => const MistralAISummaryRoute().go(context),
-            ),
-            ListTile(
-              title: const Text('MistralAI LLM Controller example'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => const MistralAILlmControllerRoute().go(context),
-            ),
-            ListTile(
-              title: const Text('MistralAI Book Search example'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => const MistralAIBookSearchRoute().go(context),
-            ),
-          ],
+          ),
         ),
       );
+}
+
+class MistralExampleTilesGrid extends StatelessWidget {
+  const MistralExampleTilesGrid({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final columnSize = switch (screenWidth) {
+      < 600 => 2,
+      < 900 => 3,
+      < 1500 => 4,
+      _ => 8,
+    };
+    return GridView.count(
+      primary: false,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      crossAxisCount: columnSize,
+      shrinkWrap: true,
+      childAspectRatio: 1.75,
+      children: const <Widget>[
+        ChatExampleTile(),
+        TextSummaryTile(),
+        LllAsControllerTile(),
+        BookSearchTile(),
+      ],
+    );
+  }
 }
