@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/custom_slider.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
 
 class SettingsWidget extends StatefulWidget {
@@ -44,6 +45,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: const Text('Settings'),
       ),
@@ -128,7 +130,7 @@ class TemperatureAndTopPSettingWidget extends StatelessWidget {
     final temperatureStringValue = temperature.toStringAsFixed(2);
 
     return ColoredBox(
-      color: Theme.of(context).highlightColor,
+      color: Theme.of(context).colorScheme.surfaceVariant,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 28,
@@ -143,7 +145,7 @@ class TemperatureAndTopPSettingWidget extends StatelessWidget {
                 Text(
                   'Temperature: $temperatureStringValue',
                 ),
-                Slider(
+                CustomSlider(
                   value: temperature,
                   label: temperature.toStringAsFixed(2),
                   onChanged: onTemperatureChanged,
@@ -154,9 +156,9 @@ class TemperatureAndTopPSettingWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Top P: $topP',
+                  'Top P: ${topP.toStringAsFixed(2)}',
                 ),
-                Slider(
+                CustomSlider(
                   value: topP,
                   label: topP.toStringAsFixed(2),
                   onChanged: onTopPChanged,
@@ -227,7 +229,7 @@ class SafePromptSettingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: Theme.of(context).highlightColor,
+      color: Theme.of(context).colorScheme.surfaceVariant,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 28,
@@ -278,7 +280,7 @@ class ClickableSettingsItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Material(
-        color: Theme.of(context).highlightColor,
+        color: Theme.of(context).colorScheme.surfaceVariant,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 28,
