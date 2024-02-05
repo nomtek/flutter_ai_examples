@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/summary_settings_page.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/utils.dart';
-import 'package:mistral_ai_chat_example_app/mistral_client/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
+import 'package:provider/provider.dart';
 
 class MistralAISummaryPage extends StatefulWidget {
   const MistralAISummaryPage({super.key});
@@ -26,12 +26,12 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
     super.dispose();
   }
 
-  Future<void> summarizeText(String text) async {
+  Future<void> summarizeText(BuildContext context, String text) async {
     setState(() {
       summaryResult = 'Loading...';
     });
     try {
-      final response = await mistralAIClient.chat(
+      final response = await context.read<MistralAIClient>().chat(
         ChatParams(
           model: 'mistral-medium',
           temperature: summarySettings.temperature,
@@ -98,7 +98,7 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      summarizeText(summaryInputController.text);
+                      summarizeText(context, summaryInputController.text);
                     },
                     child: const Text('Summarize'),
                   ),
@@ -107,7 +107,7 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          summarizeText(summaryTextSample);
+                          summarizeText(context, summaryTextSample);
                         },
                         child: const Text('Summarize sample tex'),
                       ),
