@@ -1,6 +1,15 @@
-# mistral_ai_chat_example_app
+# Flutter AI Examples
 
-Example app showcasing the Mistral AI chat client.
+Example app showcasing different usages of AI models.
+
+## List of examples
+
+Examples using [Mistral AI API](https://docs.mistral.ai/) through the [MistralAI Client for Dart](https://pub.dev/packages/mistralai_client_dart) package:
+
+- [Simple chat](lib/mistral_ai_chat_example/README.md)
+- [Text summary](lib/mistral_ai_summary_example/README.md)
+- [Book search](lib/mistral_ai_book_search_example/README.md)
+- [LLM as a controller](lib/mistral_ai_llm_controller_example/README.md)
 
 ## Getting Started
 
@@ -18,8 +27,18 @@ dart run build_runner build -d
 
 ### Setup Mistral AI API key
 
+#### Using environment variables
+
 1. Open the `env.env` file in the root project
 2. Replace `your api key` with your Mistral AI API key.
+
+:warning: This method is required if you want to change a book in the [book search example](lib/mistral_ai_book_search_example/README.md).
+
+#### Using the app settings
+
+It's possible to change the key at runtime in the app settings.
+
+[![App settings](docs/assets/app_settings_navigation.png)](docs/assets/app_settings_navigation.png)
 
 ### Run the example app
 
@@ -27,7 +46,7 @@ dart run build_runner build -d
 
 We've prepared some ready to use [launch configurations](.vscode/launch.json) for VSC.
 
-In most cases, you should choose the regular `mistral_ai_chat_example_app` configuration.
+In most cases, you should choose the `Run app (debug mode)` configuration.
 
 #### Using the terminal
 
@@ -39,17 +58,20 @@ flutter run --dart-define-from-file=env.env
 
 or use a script that contains the above snippet
 
-**Linux/MacOS**
+##### Linux/MacOS
+
 ```shell
 ./tool/flutter_run.sh
 ```
 
-**Windows**
+##### Windows
+
 ```shell
 tool\flutter_run.bat
 ```
 
 You can pass parameters to the script by appending them at the end like this:
+
 ```shell
 // Linux/MacOS
 ./tool/flutter_run.sh -d chrome

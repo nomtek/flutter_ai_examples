@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "mistral_ai_chat_example_app",
+            "name": "Run app (debug mode)",
             "request": "launch",
             "type": "dart",
             "toolArgs": [
@@ -14,7 +14,7 @@
             ]
         },
         {
-            "name": "mistral_ai_chat_example_app (profile mode)",
+            "name": "Run app (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
@@ -24,7 +24,7 @@
             ]
         },
         {
-            "name": "mistral_ai_chat_example_app (release mode)",
+            "name": "Run app (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",
