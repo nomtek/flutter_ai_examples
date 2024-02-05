@@ -129,6 +129,23 @@ Let's break it down:
 - `Use knowledge only from given fragments to answer the question.` - this is used to help AI chatbot understand how to use the input to get the answer and prevent it from using any other knowledge (trained data).
 - `Here are some keywords related to question: ${keywordsFromQuestion.join(', ')}.` - this is used to add additional context to AI chatbot about keywords that are related to question. Keywords were used to calculate similarity between question and book fragments
 
+### Problems encountered
+
+- AI chatbot is not always returning keywords in the format we expect
+  - we are using regex to extract keywords from the output
+  - similar problem would happen if we would like to have an answer in a specific format
+- AI chatbot is not always returning the answer
+  - here problem is about how big are the fragments that we are passing to AI chatbot
+  - how we are splitting the book into fragments
+    - fragments may be split in a wrong place which disrupts the meaning of the sentence
+    - embedding of a fragment is not representing the whole fragment well:
+      - fragments may be too short to contain the answer
+      - fragments may be too long to contain the answer
+  - Book doesn't contain the answer or the answer is really indirect (mentioned once in the book, not directly answering the question):
+    - AI chatbot can't answer the question if the answer is not in the book like:
+      - `Who is the author of the book?` - It's mentioned only once in the book
+      - `When was the book published?` - It's not mentioned in the book
+
 ### How to improve answers?
 
 Example is generating answers in a way described in [How answering works?](#how-answering-works) section.
@@ -139,3 +156,4 @@ For sure there are things that could improve how AI is answering the questions b
   - you can try to split book into fragments of different length
   - you can try to split book into fragments that don't overlap
   - you can try to split book into fragments that overlap more
+- add metadata about book to AI chatbot like author, year of publishing, genre
