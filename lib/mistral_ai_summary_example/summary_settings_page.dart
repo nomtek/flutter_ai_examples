@@ -216,9 +216,7 @@ class SafePromptSettingWidget extends StatelessWidget {
         title: Text('Safe prompt: $settingValue '),
         value: settingValue,
         onChanged: (value) {
-          context
-              .read<SummarySettingsModel>()
-              .setSafePrompt(safePrompt: value);
+          context.read<SummarySettingsModel>().setSafePrompt(safePrompt: value);
         },
       ),
     );
@@ -252,27 +250,14 @@ class ClickableSettingsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Theme.of(context).colorScheme.surface,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 28,
-            vertical: 16,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                settingName,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              Text(
-                settingValue,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 29,
+          vertical: 8,
         ),
+        title: Text(settingName),
+        subtitle: Text(settingValue),
+        onTap: onTap,
       ),
     );
   }
