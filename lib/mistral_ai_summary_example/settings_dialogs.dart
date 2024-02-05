@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_model.dart';
+import 'package:provider/provider.dart';
 
 class SettingsDialog extends StatefulWidget {
   const SettingsDialog({
@@ -12,13 +13,23 @@ class SettingsDialog extends StatefulWidget {
 }
 
 class _SettingsDialogState extends State<SettingsDialog> {
-  MistralAIModel selectedModel = MistralAIModel.mistralMedium;
+  late MistralAIModel selectedModel;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedModel = context.read<SummarySettingsModel>().settings.model;
+  }
+
   @override
   Widget build(BuildContext context) {
     return CommonSettingsDialog(
       title: 'Model',
       description: 'Choose a Mistral model',
-      onSettingChanged: () {},
+      onSettingChanged: () {
+        context.read<SummarySettingsModel>().setModel(selectedModel);
+        Navigator.of(context).pop();
+      },
       child: Column(
         children: MistralAIModel.values
             .map(
@@ -55,6 +66,14 @@ class _MaxTokensDialogState extends State<MaxTokensDialog> {
   final TextEditingController _maxTokensController = TextEditingController();
 
   @override
+  void initState() {
+    _maxTokensController.text =
+        context.read<SummarySettingsModel>().settings.maxTokens?.toString() ??
+            '';
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _maxTokensController.dispose();
     super.dispose();
@@ -65,7 +84,13 @@ class _MaxTokensDialogState extends State<MaxTokensDialog> {
     return CommonSettingsDialog(
       title: 'Max Tokens',
       description: 'Write a number if you want to set a max of tokens',
-      onSettingChanged: () {},
+      onSettingChanged: () {
+        final maxTokens = _maxTokensController.text.isEmpty
+            ? null
+            : int.tryParse(_maxTokensController.text);
+        context.read<SummarySettingsModel>().setMaxTokens(maxTokens);
+        Navigator.of(context).pop();
+      },
       child: Column(
         children: [
           const SizedBox(height: 24),
@@ -91,7 +116,8 @@ class _MaxTokensDialogState extends State<MaxTokensDialog> {
               ),
               Switch(
                 value: _maxTokensController.text.isEmpty,
-                onChanged: (value) {},
+                onChanged: null,
+                activeTrackColor: Theme.of(context).colorScheme.primary,
               ),
             ],
           ),
@@ -101,7 +127,6 @@ class _MaxTokensDialogState extends State<MaxTokensDialog> {
     );
   }
 }
-
 
 class RandomSeedDialog extends StatefulWidget {
   const RandomSeedDialog({
@@ -116,6 +141,14 @@ class _RandomSeedDialogState extends State<RandomSeedDialog> {
   final TextEditingController _randomSeedController = TextEditingController();
 
   @override
+  void initState() {
+    _randomSeedController.text =
+        context.read<SummarySettingsModel>().settings.randomSeed?.toString() ??
+            '';
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _randomSeedController.dispose();
     super.dispose();
@@ -126,13 +159,19 @@ class _RandomSeedDialogState extends State<RandomSeedDialog> {
     return CommonSettingsDialog(
       title: 'Random Seed',
       description: 'Write a number if you want to set a random seed',
-      onSettingChanged: () {},
+      onSettingChanged: () {
+        final randomSeed = _randomSeedController.text.isEmpty
+            ? null
+            : int.tryParse(_randomSeedController.text);
+        context.read<SummarySettingsModel>().setRandomSeed(randomSeed);
+        Navigator.of(context).pop();
+      },
       child: Column(
         children: [
           const SizedBox(height: 24),
           TextField(
             controller: _randomSeedController,
-            onChanged: (value) => setState(() {}),
+            onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               suffixIcon: InkWell(
@@ -152,7 +191,8 @@ class _RandomSeedDialogState extends State<RandomSeedDialog> {
               ),
               Switch(
                 value: _randomSeedController.text.isEmpty,
-                onChanged: (value) {},
+                onChanged: null,
+                activeTrackColor: Theme.of(context).colorScheme.primary,
               ),
             ],
           ),

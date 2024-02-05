@@ -1,47 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/custom_slider.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_dialogs.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_model.dart';
+import 'package:provider/provider.dart';
 
-class SettingsWidget extends StatefulWidget {
+class SettingsWidget extends StatelessWidget {
   const SettingsWidget({
-    required this.initialSettings,
     super.key,
   });
-
-  final SummarySettings initialSettings;
-
-  @override
-  State<SettingsWidget> createState() => _SettingsWidgetState();
-}
-
-class _SettingsWidgetState extends State<SettingsWidget> {
-  SummarySettings summarySettings = SummarySettings();
-
-  final TextEditingController modelController = TextEditingController();
-  final TextEditingController maxTokensController = TextEditingController();
-  final TextEditingController randomSeedController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    summarySettings
-      ..maxTokens = widget.initialSettings.maxTokens
-      ..model = widget.initialSettings.model
-      ..randomSeed = widget.initialSettings.randomSeed
-      ..safePrompt = widget.initialSettings.safePrompt
-      ..temperature = widget.initialSettings.temperature
-      ..topP = widget.initialSettings.topP;
-  }
-
-  @override
-  void dispose() {
-    modelController.dispose();
-    maxTokensController.dispose();
-    randomSeedController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,39 +21,18 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         children: [
           Expanded(
             child: ListView(
-              children: [
-                ModelSettingWidget(summarySettings: summarySettings),
-                const SettingsListSpacer(),
-                TemperatureAndTopPSettingWidget(
-                  temperature: summarySettings.temperature,
-                  topP: summarySettings.topP,
-                  onTemperatureChanged: (value) =>
-                      setState(() => summarySettings.temperature = value),
-                  onTopPChanged: (value) =>
-                      setState(() => summarySettings.topP = value),
-                ),
-                const SettingsListSpacer(),
-                MaxTokensSettingWidget(summarySettings: summarySettings),
-                const SettingsListSpacer(),
-                RandomSeedSettingWidget(summarySettings: summarySettings),
-                const SettingsListSpacer(),
-                SafePromptSettingWidget(
-                  settingValue: summarySettings.safePrompt,
-                  onChanged: (value) =>
-                      setState(() => summarySettings.safePrompt = value),
-                ),
+              children: const [
+                ModelSettingWidget(),
+                SettingsListSpacer(),
+                TemperatureAndTopPSettingWidget(),
+                SettingsListSpacer(),
+                MaxTokensSettingWidget(),
+                SettingsListSpacer(),
+                RandomSeedSettingWidget(),
+                SettingsListSpacer(),
+                SafePromptSettingWidget(),
               ],
             ),
-          ),
-          ButtonBar(
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context, summarySettings);
-                },
-                child: const Text('Save'),
-              ),
-            ],
           ),
         ],
       ),
@@ -97,11 +42,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
 class ModelSettingWidget extends StatefulWidget {
   const ModelSettingWidget({
-    required this.summarySettings,
     super.key,
   });
-
-  final SummarySettings summarySettings;
 
   @override
   State<ModelSettingWidget> createState() => _ModelSettingWidgetState();
@@ -114,11 +56,15 @@ class _ModelSettingWidgetState extends State<ModelSettingWidget> {
   Widget build(BuildContext context) {
     return ClickableSettingsItem(
       settingName: 'Model',
-      settingValue: widget.summarySettings.model.name,
+      settingValue: context.watch<SummarySettingsModel>().settings.model.name,
       onTap: () {
+        final summarySettingsModel = context.read<SummarySettingsModel>();
         showDialog<void>(
           context: context,
-          builder: (context) => const SettingsDialog(),
+          builder: (_) => ChangeNotifierProvider.value(
+            value: summarySettingsModel,
+            child: const SettingsDialog(),
+          ),
         );
       },
     );
@@ -127,21 +73,18 @@ class _ModelSettingWidgetState extends State<ModelSettingWidget> {
 
 class TemperatureAndTopPSettingWidget extends StatelessWidget {
   const TemperatureAndTopPSettingWidget({
-    required this.temperature,
-    required this.topP,
-    required this.onTemperatureChanged,
-    required this.onTopPChanged,
     super.key,
   });
-  final double temperature;
-  final double topP;
-  final void Function(double) onTemperatureChanged;
-  final void Function(double) onTopPChanged;
 
   @override
   Widget build(BuildContext context) {
+    final temperature =
+        context.watch<SummarySettingsModel>().settings.temperature;
+
     // to long to put in one line
     final temperatureStringValue = temperature.toStringAsFixed(2);
+
+    final topP = context.watch<SummarySettingsModel>().settings.topP;
 
     return ColoredBox(
       color: Theme.of(context).colorScheme.surface,
@@ -162,7 +105,9 @@ class TemperatureAndTopPSettingWidget extends StatelessWidget {
                 CustomSlider(
                   value: temperature,
                   label: temperature.toStringAsFixed(2),
-                  onChanged: onTemperatureChanged,
+                  onChanged: (value) => context
+                      .read<SummarySettingsModel>()
+                      .setTemperature(value),
                 ),
               ],
             ),
@@ -175,7 +120,8 @@ class TemperatureAndTopPSettingWidget extends StatelessWidget {
                 CustomSlider(
                   value: topP,
                   label: topP.toStringAsFixed(2),
-                  onChanged: onTopPChanged,
+                  onChanged: (value) =>
+                      context.read<SummarySettingsModel>().setTopP(value),
                 ),
               ],
             ),
@@ -195,21 +141,27 @@ class TemperatureAndTopPSettingWidget extends StatelessWidget {
 
 class MaxTokensSettingWidget extends StatelessWidget {
   const MaxTokensSettingWidget({
-    required this.summarySettings,
     super.key,
   });
-
-  final SummarySettings summarySettings;
 
   @override
   Widget build(BuildContext context) {
     return ClickableSettingsItem(
       settingName: 'Max tokens',
-      settingValue: summarySettings.maxTokens.toString(),
+      settingValue: context
+              .watch<SummarySettingsModel>()
+              .settings
+              .maxTokens
+              ?.toString() ??
+          'Unlimited',
       onTap: () {
+        final summarySettingsModel = context.read<SummarySettingsModel>();
         showDialog<void>(
           context: context,
-          builder: (context) => const MaxTokensDialog(),
+          builder: (_) => ChangeNotifierProvider.value(
+            value: summarySettingsModel,
+            child: const MaxTokensDialog(),
+          ),
         );
       },
     );
@@ -218,21 +170,27 @@ class MaxTokensSettingWidget extends StatelessWidget {
 
 class RandomSeedSettingWidget extends StatelessWidget {
   const RandomSeedSettingWidget({
-    required this.summarySettings,
     super.key,
   });
-
-  final SummarySettings summarySettings;
 
   @override
   Widget build(BuildContext context) {
     return ClickableSettingsItem(
       settingName: 'Random seed',
-      settingValue: summarySettings.randomSeed.toString(),
+      settingValue: context
+              .watch<SummarySettingsModel>()
+              .settings
+              .randomSeed
+              ?.toString() ??
+          'Unset',
       onTap: () {
-          showDialog<void>(
+        final summarySettingsModel = context.read<SummarySettingsModel>();
+        showDialog<void>(
           context: context,
-          builder: (context) => const RandomSeedDialog(),
+          builder: (_) => ChangeNotifierProvider.value(
+            value: summarySettingsModel,
+            child: const RandomSeedDialog(),
+          ),
         );
       },
     );
@@ -241,17 +199,13 @@ class RandomSeedSettingWidget extends StatelessWidget {
 
 class SafePromptSettingWidget extends StatelessWidget {
   const SafePromptSettingWidget({
-    required this.settingValue,
-    required this.onChanged,
     super.key,
   });
 
-  final bool settingValue;
-  // ignore: avoid_positional_boolean_parameters
-  final void Function(bool) onChanged;
-
   @override
   Widget build(BuildContext context) {
+    final settingValue =
+        context.watch<SummarySettingsModel>().settings.safePrompt;
     return ColoredBox(
       color: Theme.of(context).colorScheme.surface,
       child: Padding(
@@ -267,7 +221,10 @@ class SafePromptSettingWidget extends StatelessWidget {
             ),
             Switch(
               value: settingValue,
-              onChanged: onChanged,
+              onChanged: (value) =>
+                  context.read<SummarySettingsModel>().setSafePrompt(
+                        safePrompt: value,
+                      ),
             ),
           ],
         ),

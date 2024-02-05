@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_model.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/summary_settings_page.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/utils.dart';
 import 'package:mistral_ai_chat_example_app/mistral_client/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
+import 'package:provider/provider.dart';
 
 class MistralAISummaryPage extends StatefulWidget {
   const MistralAISummaryPage({super.key});
@@ -19,25 +20,23 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
   String summaryResult = '';
   bool summaryInProgress = false;
 
-  SummarySettings summarySettings = SummarySettings();
-
   @override
   void dispose() {
     summaryInputController.dispose();
     super.dispose();
   }
 
-  Future<void> summarizeText(String text) async {
+  Future<void> summarizeText(String text, SummarySettings settings) async {
     setState(() => summaryInProgress = true);
     try {
       final response = await mistralAIClient.chat(
         ChatParams(
           model: 'mistral-medium',
-          temperature: summarySettings.temperature,
-          topP: summarySettings.topP,
-          randomSeed: summarySettings.randomSeed,
-          maxTokens: summarySettings.maxTokens,
-          safePrompt: summarySettings.safePrompt,
+          temperature: settings.temperature,
+          topP: settings.topP,
+          randomSeed: settings.randomSeed,
+          maxTokens: settings.maxTokens,
+          safePrompt: settings.safePrompt,
           messages: [
             ChatMessage(role: 'user', content: getSummaryPromptForText(text)),
           ],
@@ -59,38 +58,43 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('MistralAI Summary'),
-        actions: [
-          SummarySettingsButton(
-            currentSettings: summarySettings,
-            onSettingsChanged: (newSettings) {
-              setState(() => summarySettings = newSettings);
-            },
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: ListView(
-            children: <Widget>[
-              SummaryTextInput(summaryInputController: summaryInputController),
-              const SizedBox(height: 20),
-              SummaryActions(
-                onSummarize: () => summarizeText(summaryInputController.text),
-                summaryInputController: summaryInputController,
-              ),
-              const SizedBox(height: 20),
-              SummaryResultText(
-                summaryResult: summaryResult,
-                isLoading: summaryInProgress,
-              ),
+    return ChangeNotifierProvider(
+      create: (_) => SummarySettingsModel(),
+      builder: (context, _) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('MistralAI Summary'),
+            actions: const [
+              SummarySettingsButton(),
             ],
           ),
-        ),
-      ),
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: ListView(
+                children: <Widget>[
+                  SummaryTextInput(
+                    summaryInputController: summaryInputController,
+                  ),
+                  const SizedBox(height: 20),
+                  SummaryActions(
+                    onSummarize: () => summarizeText(
+                      summaryInputController.text,
+                      context.read<SummarySettingsModel>().settings,
+                    ),
+                    summaryInputController: summaryInputController,
+                  ),
+                  const SizedBox(height: 20),
+                  SummaryResultText(
+                    summaryResult: summaryResult,
+                    isLoading: summaryInProgress,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -247,30 +251,22 @@ class SampleTextDialogButton extends StatelessWidget {
 
 class SummarySettingsButton extends StatelessWidget {
   const SummarySettingsButton({
-    required this.onSettingsChanged,
-    required this.currentSettings,
     super.key,
   });
 
-  final void Function(SummarySettings newSettings) onSettingsChanged;
-  final SummarySettings currentSettings;
-
   @override
   Widget build(BuildContext context) {
+    final settingsModel = context.watch<SummarySettingsModel>();
     return IconButton(
-      onPressed: () async {
-        final newSettings = await Navigator.push(
-          context,
-          MaterialPageRoute<SummarySettings>(
-            builder: (BuildContext context) => SettingsWidget(
-              initialSettings: currentSettings,
-            ),
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute<SummarySettings>(
+          builder: (_) => ChangeNotifierProvider.value(
+            value: settingsModel,
+            child: const SettingsWidget(),
           ),
-        );
-        if (newSettings != null) {
-          onSettingsChanged(newSettings);
-        }
-      },
+        ),
+      ),
       icon: const Icon(Icons.settings),
     );
   }
