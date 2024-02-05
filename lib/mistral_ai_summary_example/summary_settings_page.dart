@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mistral_ai_chat_example_app/app/theme.dart';
 
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_dialogs.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_model.dart';
@@ -11,30 +12,31 @@ class SettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-      appBar: AppBar(
-        title: const Text('Settings'),
-        backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: const [
-                ModelSettingWidget(),
-                SettingsListSpacer(),
-                TemperatureAndTopPSettingWidget(),
-                SettingsListSpacer(),
-                MaxTokensSettingWidget(),
-                SettingsListSpacer(),
-                RandomSeedSettingWidget(),
-                SettingsListSpacer(),
-                SafePromptSettingWidget(),
-              ],
+    return DarkerBackgroundTheme(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Settings'),
+          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: const [
+                  ModelSettingWidget(),
+                  SettingsListSpacer(),
+                  TemperatureAndTopPSettingWidget(),
+                  SettingsListSpacer(),
+                  MaxTokensSettingWidget(),
+                  SettingsListSpacer(),
+                  RandomSeedSettingWidget(),
+                  SettingsListSpacer(),
+                  SafePromptSettingWidget(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
