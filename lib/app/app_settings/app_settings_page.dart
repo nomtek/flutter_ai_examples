@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:mistral_ai_chat_example_app/app/app_settings/app_settings.dart';
+import 'package:mistral_ai_chat_example_app/app/theme.dart';
 import 'package:provider/provider.dart';
 
 class AppSettingsPage extends StatelessWidget {
@@ -8,26 +10,31 @@ class AppSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mistralAIApiKey = context.watch<AppSettings>().mistralApiKey;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('App Settings'),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            ListTile(
-              title: const Text('Mistral AI API Key'),
-              subtitle: Text('Current value: $mistralAIApiKey'),
-              onTap: () {
-                showDialog<void>(
-                  context: context,
-                  builder: (context) => MistralAIApiKeyField(
-                    currentApiKey: context.read<AppSettings>().mistralApiKey,
-                  ),
-                );
-              },
-            ),
-          ],
+
+    return DarkerBackgroundTheme(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('App Settings'),
+        ),
+        body: SafeArea(
+          child: Column(
+            children: [
+              ListTile(
+                leading: const Icon(Symbols.key_vertical),
+                titleAlignment: ListTileTitleAlignment.titleHeight,
+                title: const Text('Mistral AI API Key'),
+                subtitle: Text('Current value: $mistralAIApiKey'),
+                onTap: () {
+                  showDialog<void>(
+                    context: context,
+                    builder: (context) => MistralAIApiKeyField(
+                      currentApiKey: context.read<AppSettings>().mistralApiKey,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
