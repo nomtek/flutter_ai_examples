@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/book_search.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/models.dart';
-import 'package:mistral_ai_chat_example_app/mistral_client/mistral_client.dart';
 import 'package:mistral_ai_chat_example_app/mistral_tokenizer/mistral_tokenizer.dart';
 import 'package:provider/provider.dart';
 
@@ -10,9 +9,9 @@ class MistralAIBookSearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (_) => BookSearch(
-        client: mistralAIClient,
+    return ProxyProvider0(
+      update: (context, __) => BookSearch(
+        mistralAIClient: context.watch(),
         tokenizer: mistralTokenizer,
       ),
       child: const _Body(),

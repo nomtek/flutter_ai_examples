@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mistral_ai_chat_example_app/app/app_settings/app_settings_page.dart';
 import 'package:mistral_ai_chat_example_app/app/home_page.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/mistralai_book_search_page.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_chat_example/mistralai_chat_page.dart';
@@ -14,6 +15,7 @@ final router = GoRouter(routes: $appRoutes);
 @TypedGoRoute<HomeRoute>(
   path: '/',
   routes: [
+    TypedGoRoute<AppSettingsRoute>(path: 'app-settings'),
     TypedGoRoute<MistralAIChatRoute>(path: 'mistralai-chat'),
     TypedGoRoute<MistralAISummaryRoute>(path: 'mistralai-summary'),
     TypedGoRoute<MistralAILlmControllerRoute>(path: 'mistralai-llm-controller'),
@@ -25,6 +27,15 @@ class HomeRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) => const HomePage();
+}
+
+class AppSettingsRoute extends GoRouteData {
+  const AppSettingsRoute();
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return _buildPage(const AppSettingsPage());
+  }
 }
 
 class MistralAIChatRoute extends GoRouteData {

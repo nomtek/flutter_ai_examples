@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/algebra.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/models.dart';
-import 'package:mistral_ai_chat_example_app/mistral_client/mistral_client.dart';
 import 'package:mistral_ai_chat_example_app/mistral_tokenizer/mistral_tokenizer.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
@@ -12,13 +11,13 @@ import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 // and provides methods to find answers to questions
 class BookSearch {
   BookSearch({
-    required this.client,
+    required this.mistralAIClient,
     required this.tokenizer,
     this.bookTitle = 'Twenty Thousands Leagues Under the Sea',
     this.bookSearchDataAssetPath = 'assets/20k_leages_under_the_sea_verne.json',
   });
 
-  final MistralAIClient client;
+  final MistralAIClient mistralAIClient;
   final MistralTokenizer tokenizer;
   late SearchData _searchData;
   bool _init = false;

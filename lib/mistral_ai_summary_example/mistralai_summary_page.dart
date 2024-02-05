@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_model.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/summary_settings_page.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/utils.dart';
-import 'package:mistral_ai_chat_example_app/mistral_client/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 import 'package:provider/provider.dart';
 
@@ -28,20 +27,24 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
 
   Future<void> summarizeText(String text, SummarySettings settings) async {
     setState(() => summaryInProgress = true);
+
     try {
-      final response = await mistralAIClient.chat(
-        ChatParams(
-          model: 'mistral-medium',
-          temperature: settings.temperature,
-          topP: settings.topP,
-          randomSeed: settings.randomSeed,
-          maxTokens: settings.maxTokens,
-          safePrompt: settings.safePrompt,
-          messages: [
-            ChatMessage(role: 'user', content: getSummaryPromptForText(text)),
-          ],
-        ),
-      );
+      final response = await context.read<MistralAIClient>().chat(
+            ChatParams(
+              model: 'mistral-medium',
+              temperature: settings.temperature,
+              topP: settings.topP,
+              randomSeed: settings.randomSeed,
+              maxTokens: settings.maxTokens,
+              safePrompt: settings.safePrompt,
+              messages: [
+                ChatMessage(
+                  role: 'user',
+                  content: getSummaryPromptForText(text),
+                ),
+              ],
+            ),
+          );
       setState(() {
         summaryResult = response.choices.first.message.content;
       });
