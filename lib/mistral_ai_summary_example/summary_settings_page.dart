@@ -45,9 +45,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
       appBar: AppBar(
         title: const Text('Settings'),
+        backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
       ),
       body: Column(
         children: [
@@ -130,7 +131,7 @@ class TemperatureAndTopPSettingWidget extends StatelessWidget {
     final temperatureStringValue = temperature.toStringAsFixed(2);
 
     return ColoredBox(
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: Theme.of(context).colorScheme.surface,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 28,
@@ -229,7 +230,7 @@ class SafePromptSettingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: Theme.of(context).colorScheme.surface,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 28,
@@ -277,10 +278,10 @@ class ClickableSettingsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Material(
-        color: Theme.of(context).colorScheme.surfaceVariant,
+    return Material(
+      color: Theme.of(context).colorScheme.surface,
+      child: InkWell(
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 28,
