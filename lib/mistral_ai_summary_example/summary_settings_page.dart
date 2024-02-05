@@ -108,7 +108,7 @@ class ModelSettingWidget extends StatefulWidget {
 }
 
 class _ModelSettingWidgetState extends State<ModelSettingWidget> {
-  final selectedModel = MistralAIModel.mistralMedium;
+  MistralAIModel selectedModel = MistralAIModel.mistralMedium;
 
   @override
   Widget build(BuildContext context) {
@@ -122,22 +122,6 @@ class _ModelSettingWidgetState extends State<ModelSettingWidget> {
             return SettingsDialog(
               title: 'Model',
               description: 'Choose a Mistral model',
-              child: Column(
-                children: MistralAIModel.values
-                    .map(
-                      (model) => RadioListTile<MistralAIModel>(
-                        title: Text(model.name),
-                        value: model,
-                        groupValue: selectedModel,
-                        onChanged: (value) {
-                          setState(() {
-                            widget.summarySettings.model = value!;
-                          });
-                        },
-                      ),
-                    )
-                    .toList(),
-              ),
               onSettingChanged: () {},
             );
           },
