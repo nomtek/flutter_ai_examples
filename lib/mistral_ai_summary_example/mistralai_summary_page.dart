@@ -170,6 +170,7 @@ class SummaryTextInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      autofocus: true,
       controller: summaryInputController,
       decoration: const InputDecoration(
         border: OutlineInputBorder(),

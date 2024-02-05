@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_model.dart';
 import 'package:provider/provider.dart';
@@ -96,6 +97,11 @@ class _MaxTokensDialogState extends State<MaxTokensDialog> {
           const SizedBox(height: 24),
           TextField(
             controller: _maxTokensController,
+            autofocus: true,
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
             onChanged: (value) => setState(() {}),
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
@@ -170,6 +176,11 @@ class _RandomSeedDialogState extends State<RandomSeedDialog> {
         children: [
           const SizedBox(height: 24),
           TextField(
+            autofocus: true,
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
             controller: _randomSeedController,
             onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
