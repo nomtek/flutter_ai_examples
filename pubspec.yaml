@@ -14,6 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
   go_router: ^13.0.1
+  google_fonts: ^6.1.0
   json_annotation: ^4.8.1
   langchain: ^0.4.0
   material_symbols_icons: ^4.2718.0
@@ -35,3 +36,4 @@ flutter:
 
   assets:
     - assets/
+    - assets/fonts/
