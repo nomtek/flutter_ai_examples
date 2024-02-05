@@ -24,7 +24,7 @@ class _SettingsDialogState extends State<SettingsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return CommonSettingsDialog(
+    return BaseSettingsDialog(
       title: 'Model',
       description: 'Choose a Mistral model',
       onSettingChanged: () {
@@ -82,7 +82,7 @@ class _MaxTokensDialogState extends State<MaxTokensDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return CommonSettingsDialog(
+    return BaseSettingsDialog(
       title: 'Max Tokens',
       description: 'Write a number if you want to set a max of tokens',
       onSettingChanged: () {
@@ -162,7 +162,7 @@ class _RandomSeedDialogState extends State<RandomSeedDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return CommonSettingsDialog(
+    return BaseSettingsDialog(
       title: 'Random Seed',
       description: 'Write a number if you want to set a random seed',
       onSettingChanged: () {
@@ -214,8 +214,8 @@ class _RandomSeedDialogState extends State<RandomSeedDialog> {
   }
 }
 
-class CommonSettingsDialog extends StatelessWidget {
-  const CommonSettingsDialog({
+class BaseSettingsDialog extends StatelessWidget {
+  const BaseSettingsDialog({
     required this.title,
     required this.description,
     required this.child,
