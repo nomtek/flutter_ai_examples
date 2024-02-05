@@ -102,6 +102,67 @@ class _MaxTokensDialogState extends State<MaxTokensDialog> {
   }
 }
 
+
+class RandomSeedDialog extends StatefulWidget {
+  const RandomSeedDialog({
+    super.key,
+  });
+
+  @override
+  State<RandomSeedDialog> createState() => _RandomSeedDialogState();
+}
+
+class _RandomSeedDialogState extends State<RandomSeedDialog> {
+  final TextEditingController _randomSeedController = TextEditingController();
+
+  @override
+  void dispose() {
+    _randomSeedController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CommonSettingsDialog(
+      title: 'Random Seed',
+      description: 'Write a number if you want to set a random seed',
+      onSettingChanged: () {},
+      child: Column(
+        children: [
+          const SizedBox(height: 24),
+          TextField(
+            controller: _randomSeedController,
+            onChanged: (value) => setState(() {}),
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              suffixIcon: InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () => setState(_randomSeedController.clear),
+                child: const Icon(Symbols.cancel),
+              ),
+              hintText: 'e.g. 123',
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Unset',
+              ),
+              Switch(
+                value: _randomSeedController.text.isEmpty,
+                onChanged: (value) {},
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+}
+
 class CommonSettingsDialog extends StatelessWidget {
   const CommonSettingsDialog({
     required this.title,

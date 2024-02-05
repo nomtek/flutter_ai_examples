@@ -229,7 +229,12 @@ class RandomSeedSettingWidget extends StatelessWidget {
     return ClickableSettingsItem(
       settingName: 'Random seed',
       settingValue: summarySettings.randomSeed.toString(),
-      onTap: () {},
+      onTap: () {
+          showDialog<void>(
+          context: context,
+          builder: (context) => const RandomSeedDialog(),
+        );
+      },
     );
   }
 }
