@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/app/home_tiles.dart';
+import 'package:mistral_ai_chat_example_app/app/router.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
   @override
-  Widget build(BuildContext context) => const Scaffold(
-        body: SafeArea(
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Fluter AI Examples'),
+          actions: [
+            IconButton(
+              onPressed: () => const AppSettingsRoute().go(context),
+              icon: const Icon(Icons.settings),
+            ),
+          ],
+        ),
+        body: const SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(20),
             child: Column(
