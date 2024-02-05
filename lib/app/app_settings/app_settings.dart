@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mistral_ai_chat_example_app/mistral_client/mistral_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // key for the shared preferences where the API key is stored
 const _sharedPrefsMistralApiKey = 'mistralApiKey';
+
+// environment variable for the Mistral AI API key
+const String _mistralAIApiKeyEnvVar =
+    String.fromEnvironment('MISTRAL_AI_API_KEY');
 
 class AppSettings extends ValueNotifier<AppSettingsData> {
   AppSettings(this._sharedPreferences)
@@ -22,7 +25,10 @@ class AppSettings extends ValueNotifier<AppSettingsData> {
     if (!_sharedPreferences.containsKey(_sharedPrefsMistralApiKey)) {
       // if there is no persisted API key,
       // try to set the environment variable one as a fallback
-      _sharedPreferences.setString(_sharedPrefsMistralApiKey, mistralAIApiKey);
+      _sharedPreferences.setString(
+        _sharedPrefsMistralApiKey,
+        _mistralAIApiKeyEnvVar,
+      );
     }
     mistralApiKey =
         _sharedPreferences.getString(_sharedPrefsMistralApiKey) ?? '';
