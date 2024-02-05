@@ -66,12 +66,19 @@ class _ChatSettingsButton extends StatelessWidget {
       builder: (context) {
         return ChangeNotifierProvider.value(
           value: chatModel,
-          child: const SizedBox(
+          child: SizedBox(
             height: 200,
             child: Column(
               children: [
-                SizedBox(height: 8),
-                _StreamingModeSwitch(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
+                  child: Text(
+                    'Settings',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const _StreamingModeSwitch(),
               ],
             ),
           ),
