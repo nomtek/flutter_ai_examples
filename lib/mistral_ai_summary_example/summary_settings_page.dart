@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/custom_slider.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_dialog.dart';
 
 class SettingsWidget extends StatefulWidget {
   const SettingsWidget({
@@ -94,7 +95,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   }
 }
 
-class ModelSettingWidget extends StatelessWidget {
+class ModelSettingWidget extends StatefulWidget {
   const ModelSettingWidget({
     required this.summarySettings,
     super.key,
@@ -103,11 +104,45 @@ class ModelSettingWidget extends StatelessWidget {
   final SummarySettings summarySettings;
 
   @override
+  State<ModelSettingWidget> createState() => _ModelSettingWidgetState();
+}
+
+class _ModelSettingWidgetState extends State<ModelSettingWidget> {
+  final selectedModel = MistralAIModel.mistralMedium;
+
+  @override
   Widget build(BuildContext context) {
     return ClickableSettingsItem(
       settingName: 'Model',
-      settingValue: summarySettings.model.name,
-      onTap: () {},
+      settingValue: widget.summarySettings.model.name,
+      onTap: () {
+        showDialog<void>(
+          context: context,
+          builder: (context) {
+            return SettingsDialog(
+              title: 'Model',
+              description: 'Choose a Mistral model',
+              child: Column(
+                children: MistralAIModel.values
+                    .map(
+                      (model) => RadioListTile<MistralAIModel>(
+                        title: Text(model.name),
+                        value: model,
+                        groupValue: selectedModel,
+                        onChanged: (value) {
+                          setState(() {
+                            widget.summarySettings.model = value!;
+                          });
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+              onSettingChanged: () {},
+            );
+          },
+        );
+      },
     );
   }
 }

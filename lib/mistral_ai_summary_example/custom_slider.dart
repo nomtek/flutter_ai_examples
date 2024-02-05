@@ -52,7 +52,7 @@ class CustomThumb extends SliderComponentShape {
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return Size(thumbWidth, thumbHeight);
+    return Size(thumbWidth + space * 2, thumbHeight);
   }
 
   @override
