@@ -63,7 +63,7 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
       builder: (context, _) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('MistralAI Summary'),
+            title: const Text('MistralAI Text Summary'),
             actions: const [
               SummarySettingsButton(),
             ],
