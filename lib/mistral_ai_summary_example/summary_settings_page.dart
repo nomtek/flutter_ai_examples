@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_dialogs.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_model.dart';
 import 'package:provider/provider.dart';
@@ -207,26 +208,18 @@ class SafePromptSettingWidget extends StatelessWidget {
         context.watch<SummarySettingsModel>().settings.safePrompt;
     return ColoredBox(
       color: Theme.of(context).colorScheme.surface,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 28,
-          vertical: 16,
+      child: SwitchListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 29,
+          vertical: 10,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Safe prompt: $settingValue',
-            ),
-            Switch(
-              value: settingValue,
-              onChanged: (value) =>
-                  context.read<SummarySettingsModel>().setSafePrompt(
-                        safePrompt: value,
-                      ),
-            ),
-          ],
-        ),
+        title: Text('Safe prompt: $settingValue '),
+        value: settingValue,
+        onChanged: (value) {
+          context
+              .read<SummarySettingsModel>()
+              .setSafePrompt(safePrompt: value);
+        },
       ),
     );
   }
