@@ -71,7 +71,7 @@ class _MistralAIApiKeyFieldState extends State<MistralAIApiKeyField> {
         ),
         TextButton(
           onPressed: () => _save(context),
-          child: const Text('Save'),
+          child: const Text('Update'),
         ),
       ],
       title: const Text('Update Mistral AI API Key'),
