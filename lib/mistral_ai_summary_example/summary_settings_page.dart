@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/custom_slider.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/model.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_dialog.dart';
+import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_dialogs.dart';
 
 class SettingsWidget extends StatefulWidget {
   const SettingsWidget({
@@ -118,13 +118,7 @@ class _ModelSettingWidgetState extends State<ModelSettingWidget> {
       onTap: () {
         showDialog<void>(
           context: context,
-          builder: (context) {
-            return SettingsDialog(
-              title: 'Model',
-              description: 'Choose a Mistral model',
-              onSettingChanged: () {},
-            );
-          },
+          builder: (context) => const SettingsDialog(),
         );
       },
     );
@@ -212,7 +206,12 @@ class MaxTokensSettingWidget extends StatelessWidget {
     return ClickableSettingsItem(
       settingName: 'Max tokens',
       settingValue: summarySettings.maxTokens.toString(),
-      onTap: () {},
+      onTap: () {
+        showDialog<void>(
+          context: context,
+          builder: (context) => const MaxTokensDialog(),
+        );
+      },
     );
   }
 }
