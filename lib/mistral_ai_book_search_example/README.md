@@ -13,7 +13,7 @@ Features:
 
 ## How the search data look like?
 
-This example is using `Twenty Thousand Leagues under the Sea` by Jules Verne book.
+This example is using `Twenty Thousand Leagues under the Sea` by Jules Verne book. Downloaded from [Project Gutenberg](https://www.gutenberg.org/ebooks/164).
 
 Based on the book text we generated a [json file](../../assets/20k_leages_under_the_sea_verne.json) with embeddings and tokenized fragments of text.
 
