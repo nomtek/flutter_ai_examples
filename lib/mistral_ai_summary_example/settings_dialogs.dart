@@ -82,9 +82,11 @@ class _MaxTokensDialogState extends State<MaxTokensDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseSettingsDialog(
+    return BaseNumberInputDialog(
       title: 'Max Tokens',
       description: 'Write a number if you want to set a max of tokens',
+      hintText: 'e.g. 300',
+      controller: _maxTokensController,
       onSettingChanged: () {
         final maxTokens = _maxTokensController.text.isEmpty
             ? null
@@ -92,44 +94,8 @@ class _MaxTokensDialogState extends State<MaxTokensDialog> {
         context.read<SummarySettingsModel>().setMaxTokens(maxTokens);
         Navigator.of(context).pop();
       },
-      child: Column(
-        children: [
-          const SizedBox(height: 24),
-          TextField(
-            controller: _maxTokensController,
-            autofocus: true,
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            onChanged: (value) => setState(() {}),
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              suffixIcon: InkWell(
-                borderRadius: BorderRadius.circular(20),
-                onTap: () => setState(_maxTokensController.clear),
-                child: const Icon(Symbols.cancel),
-              ),
-              hintText: 'e.g. 500',
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Unlimited',
-              ),
-              Switch(
-                value: _maxTokensController.text.isEmpty,
-                onChanged: null,
-                activeTrackColor: Theme.of(context).colorScheme.primary,
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-        ],
-      ),
+      onInputChanged: (value) => setState(() {}),
+      onClear: () => setState(_maxTokensController.clear),
     );
   }
 }
@@ -162,9 +128,11 @@ class _RandomSeedDialogState extends State<RandomSeedDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseSettingsDialog(
+    return BaseNumberInputDialog(
       title: 'Random Seed',
       description: 'Write a number if you want to set a random seed',
+      hintText: 'e.g. 123',
+      controller: _randomSeedController,
       onSettingChanged: () {
         final randomSeed = _randomSeedController.text.isEmpty
             ? null
@@ -172,6 +140,38 @@ class _RandomSeedDialogState extends State<RandomSeedDialog> {
         context.read<SummarySettingsModel>().setRandomSeed(randomSeed);
         Navigator.of(context).pop();
       },
+      onInputChanged: (value) => setState(() {}),
+      onClear: () => setState(_randomSeedController.clear),
+    );
+  }
+}
+
+class BaseNumberInputDialog extends StatelessWidget {
+  const BaseNumberInputDialog({
+    required this.title,
+    required this.description,
+    required this.hintText,
+    required this.controller,
+    required this.onSettingChanged,
+    required this.onInputChanged,
+    required this.onClear,
+    super.key,
+  });
+
+  final String title;
+  final String description;
+  final String hintText;
+  final TextEditingController controller;
+  final VoidCallback onSettingChanged;
+  final void Function(String?) onInputChanged;
+  final VoidCallback onClear;
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseSettingsDialog(
+      title: title,
+      description: description,
+      onSettingChanged: onSettingChanged,
       child: Column(
         children: [
           const SizedBox(height: 24),
@@ -181,31 +181,17 @@ class _RandomSeedDialogState extends State<RandomSeedDialog> {
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
             ],
-            controller: _randomSeedController,
-            onChanged: (_) => setState(() {}),
+            controller: controller,
+            onChanged: onInputChanged,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               suffixIcon: InkWell(
                 borderRadius: BorderRadius.circular(20),
-                onTap: () => setState(_randomSeedController.clear),
+                onTap: onClear,
                 child: const Icon(Symbols.cancel),
               ),
-              hintText: 'e.g. 123',
+              hintText: hintText,
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Unset',
-              ),
-              Switch(
-                value: _randomSeedController.text.isEmpty,
-                onChanged: null,
-                activeTrackColor: Theme.of(context).colorScheme.primary,
-              ),
-            ],
           ),
           const SizedBox(height: 24),
         ],
@@ -259,7 +245,7 @@ class BaseSettingsDialog extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: onSettingChanged,
-                      child: const Text('OK'),
+                      child: const Text('Apply'),
                     ),
                   ],
                 ),
