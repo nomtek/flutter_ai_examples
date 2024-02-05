@@ -5,8 +5,8 @@ import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/lo
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/model.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/prompt.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/utils.dart';
-import 'package:mistral_ai_chat_example_app/mistral_client/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
+import 'package:provider/provider.dart';
 
 class MistralAILlmControllerPage extends StatefulWidget {
   const MistralAILlmControllerPage({super.key});
@@ -41,28 +41,31 @@ class _MistralAiLlmControllerPageState
     });
   }
 
-  Future<String> _getResponseFromAI(String command) async {
+  Future<String> _getResponseFromAI(
+    BuildContext context,
+    String command,
+  ) async {
     setState(() {
       showLoading = true;
       _log(commandMessage(command, controllerSettings));
     });
 
-    final response = await mistralAIClient.chat(
-      ChatParams(
-        model: 'mistral-medium',
-        messages: [
-          ChatMessage(role: 'system', content: controllerDescription),
-          ChatMessage(
-            role: 'system',
-            content: controllerContext(
-              availableFunctions,
-              controllerSettings,
-            ),
+    final response = await context.read<MistralAIClient>().chat(
+          ChatParams(
+            model: 'mistral-medium',
+            messages: [
+              ChatMessage(role: 'system', content: controllerDescription),
+              ChatMessage(
+                role: 'system',
+                content: controllerContext(
+                  availableFunctions,
+                  controllerSettings,
+                ),
+              ),
+              ChatMessage(role: 'user', content: command),
+            ],
           ),
-          ChatMessage(role: 'user', content: command),
-        ],
-      ),
-    );
+        );
 
     setState(() {
       showLoading = false;
@@ -108,13 +111,14 @@ class _MistralAiLlmControllerPageState
     }
   }
 
-  Future<void> _sendCommand() async {
+  Future<void> _sendCommand(BuildContext context) async {
     setState(() {
       _clearLogAndError();
       showLoading = true;
     });
     try {
       final commandResult = await _getResponseFromAI(
+        context,
         commandInputController.text,
       );
       _mapCommandResponseToUi(commandResult);
@@ -233,7 +237,7 @@ class _MistralAiLlmControllerPageState
                             )
                           : IconButton(
                               icon: const Icon(Icons.send),
-                              onPressed: _sendCommand,
+                              onPressed: () => _sendCommand(context),
                             ),
                     ),
                   ),

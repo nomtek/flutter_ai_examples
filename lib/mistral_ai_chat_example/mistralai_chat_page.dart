@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:mistral_ai_chat_example_app/mistral_client/mistral_client.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +14,7 @@ class MistralAIChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SelectionArea(
       child: ChangeNotifierProvider(
-        create: (context) => _ChatModel(mistralAIClient),
+        create: (context) => _ChatModel(context.read()),
         child: Scaffold(
           appBar: AppBar(
             title: const Text('MistralAI Chat'),

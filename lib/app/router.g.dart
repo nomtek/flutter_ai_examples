@@ -15,6 +15,10 @@ RouteBase get $homeRoute => GoRouteData.$route(
       factory: $HomeRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
+          path: 'app-settings',
+          factory: $AppSettingsRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
           path: 'mistralai-chat',
           factory: $MistralAIChatRouteExtension._fromState,
         ),
@@ -38,6 +42,24 @@ extension $HomeRouteExtension on HomeRoute {
 
   String get location => GoRouteData.$location(
         '/',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $AppSettingsRouteExtension on AppSettingsRoute {
+  static AppSettingsRoute _fromState(GoRouterState state) =>
+      const AppSettingsRoute();
+
+  String get location => GoRouteData.$location(
+        '/app-settings',
       );
 
   void go(BuildContext context) => context.go(location);
