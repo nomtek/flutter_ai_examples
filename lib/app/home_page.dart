@@ -7,7 +7,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('Fluter AI Examples'),
+          title: const Text('Flutter AI Examples'),
           actions: [
             IconButton(
               onPressed: () => const AppSettingsRoute().go(context),
