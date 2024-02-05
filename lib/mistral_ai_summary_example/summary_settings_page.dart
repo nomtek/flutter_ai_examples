@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/custom_slider.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_dialogs.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_model.dart';
 import 'package:provider/provider.dart';
@@ -102,7 +101,7 @@ class TemperatureAndTopPSettingWidget extends StatelessWidget {
                 Text(
                   'Temperature: $temperatureStringValue',
                 ),
-                CustomSlider(
+                Slider(
                   value: temperature,
                   label: temperature.toStringAsFixed(2),
                   onChanged: (value) => context
@@ -117,7 +116,7 @@ class TemperatureAndTopPSettingWidget extends StatelessWidget {
                 Text(
                   'Top P: ${topP.toStringAsFixed(2)}',
                 ),
-                CustomSlider(
+                Slider(
                   value: topP,
                   label: topP.toStringAsFixed(2),
                   onChanged: (value) =>
