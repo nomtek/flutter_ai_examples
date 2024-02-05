@@ -55,6 +55,11 @@ Do not explain anything.
           const ChatMessage(role: 'system', content: assistantRole),
           ChatMessage(role: 'user', content: userQuestion),
         ],
+        // temperature is set to 0.1 and not 0
+        // because Mistral API does not allow 0
+        // when topP is not 1 (default value)
+        temperature: 0.1, // less randomness
+        topP: 0.1, // choose from top 10% of the most likely tokens
       ),
     );
     final content = response.choices.first.message.content;
@@ -90,6 +95,11 @@ Return the answer as a plain text.
           ...fragments.map((e) => ChatMessage(role: 'system', content: e)),
           ChatMessage(role: 'user', content: userQuestion),
         ],
+        // temperature is set to 0.1 and not 0
+        // because Mistral API does not allow 0
+        // when topP is not 1 (default value)
+        temperature: 0.1, // less randomness
+        topP: 0.5, // choose from top 50% of the most likely tokens
       ),
     );
     return response.choices.first.message.content;

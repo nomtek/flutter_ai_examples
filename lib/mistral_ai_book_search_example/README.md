@@ -145,6 +145,12 @@ Let's break it down:
     - AI chatbot can't answer the question if the answer is not in the book like:
       - `Who is the author of the book?` - It's mentioned only once in the book
       - `When was the book published?` - It's not mentioned in the book
+  - Answers to the same question were different sometimes
+    - the more similar fragments to the question we pass to AI chatbot the more different answers we get
+    - generated answer is not deterministic - it's not always the same
+    - to make answers more deterministic we have to tune the `temperature` and `top_p` parameters in the request to AI chatbot
+      - `temperature` - how much randomness is added to the output (lower value means less randomness)
+      - `top_p` - how much of the probability mass is used for the next token (lower value means taking only the most probable tokens into account)
 
 ### How to improve answers?
 
@@ -157,3 +163,4 @@ For sure there are things that could improve how AI is answering the questions b
   - you can try to split book into fragments that don't overlap
   - you can try to split book into fragments that overlap more
 - add metadata about book to AI chatbot like author, year of publishing, genre
+- tweak parameters in the request to AI chatbot. There's no one size fits all solution. You have to try different parameters to see what works best for your use case.
