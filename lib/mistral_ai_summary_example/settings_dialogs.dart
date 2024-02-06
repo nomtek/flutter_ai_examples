@@ -35,6 +35,7 @@ class _SettingsDialogState extends State<SettingsDialog> {
         children: MistralAIModel.values
             .map(
               (model) => RadioListTile<MistralAIModel>(
+                tileColor: Theme.of(context).colorScheme.surfaceVariant,
                 title: Text(
                   model.name,
                   maxLines: 1,
@@ -214,11 +215,12 @@ class BaseSettingsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: SizedBox(
+    return AlertDialog(
+      surfaceTintColor: Theme.of(context).colorScheme.surfaceVariant,
+      content: SizedBox(
         width: 312, // 312 is the width of the dialog in the design
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -233,25 +235,20 @@ class BaseSettingsDialog extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               child,
-              Align(
-                alignment: Alignment.centerRight,
-                child: Wrap(
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: onSettingChanged,
-                      child: const Text('Apply'),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
       ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: onSettingChanged,
+          child: const Text('Apply'),
+        ),
+      ],
     );
   }
 }
