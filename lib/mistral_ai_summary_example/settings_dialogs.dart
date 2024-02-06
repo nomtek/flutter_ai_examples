@@ -4,16 +4,16 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_model.dart';
 import 'package:provider/provider.dart';
 
-class SettingsDialog extends StatefulWidget {
-  const SettingsDialog({
+class ModelSettingsDialog extends StatefulWidget {
+  const ModelSettingsDialog({
     super.key,
   });
 
   @override
-  State<SettingsDialog> createState() => _SettingsDialogState();
+  State<ModelSettingsDialog> createState() => _ModelSettingsDialogState();
 }
 
-class _SettingsDialogState extends State<SettingsDialog> {
+class _ModelSettingsDialogState extends State<ModelSettingsDialog> {
   late MistralAIModel selectedModel;
 
   @override

@@ -62,7 +62,7 @@ class _ModelSettingWidgetState extends State<ModelSettingWidget> {
           context: context,
           builder: (_) => ChangeNotifierProvider.value(
             value: summarySettingsModel,
-            child: const SettingsDialog(),
+            child: const ModelSettingsDialog(),
           ),
         );
       },
