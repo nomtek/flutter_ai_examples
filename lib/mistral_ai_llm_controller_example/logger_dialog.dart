@@ -21,18 +21,14 @@ class LoggerDialog extends StatelessWidget {
               child: ListView(
                 children: [
                   if (logger.isNotEmpty)
-                    ListTile(
-                      title: Text(
-                        'Logger: $logger',
-                        style: const TextStyle(color: Colors.green),
-                      ),
+                    SelectableText(
+                      'Logger: $logger',
+                      style: const TextStyle(color: Colors.green),
                     ),
                   if (errorMessage.isNotEmpty)
-                    ListTile(
-                      title: Text(
-                        'Error message: $errorMessage',
-                        style: const TextStyle(color: Colors.red),
-                      ),
+                    SelectableText(
+                      'Error message: $errorMessage',
+                      style: const TextStyle(color: Colors.red),
                     ),
                 ],
               ),

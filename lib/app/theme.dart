@@ -121,6 +121,13 @@ class DarkerBackgroundTheme extends StatelessWidget {
       listTileTheme: baseTheme.listTileTheme.copyWith(
         tileColor: baseTheme.colorScheme.surface,
       ),
+      sliderTheme: baseTheme.sliderTheme.copyWith(
+        trackHeight: 10,
+        thumbShape: CustomThumb(
+          thumbColor: baseTheme.primaryColor,
+          spacerColor: baseTheme.colorScheme.surface,
+        ),
+      ),
     );
     return Theme(data: darkBackgroundThemeData, child: child);
   }
