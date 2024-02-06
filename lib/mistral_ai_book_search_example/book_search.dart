@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/algebra.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/models.dart';
-import 'package:mistral_ai_chat_example_app/mistral_tokenizer/mistral_tokenizer.dart';
+import 'package:flutter_ai_examples/mistral_ai_book_search_example/algebra.dart';
+import 'package:flutter_ai_examples/mistral_ai_book_search_example/models.dart';
+import 'package:flutter_ai_examples/mistral_tokenizer/mistral_tokenizer.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
 // loads and keeps information about the book that is used for searching

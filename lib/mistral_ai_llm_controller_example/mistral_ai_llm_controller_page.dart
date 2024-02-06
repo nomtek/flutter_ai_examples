@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/logger_dialog.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/model.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/prompt.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/utils.dart';
+import 'package:flutter_ai_examples/mistral_ai_llm_controller_example/logger_dialog.dart';
+import 'package:flutter_ai_examples/mistral_ai_llm_controller_example/model.dart';
+import 'package:flutter_ai_examples/mistral_ai_llm_controller_example/prompt.dart';
+import 'package:flutter_ai_examples/mistral_ai_llm_controller_example/utils.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 import 'package:provider/provider.dart';
 

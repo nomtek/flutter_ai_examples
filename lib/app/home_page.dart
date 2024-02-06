@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mistral_ai_chat_example_app/app/home_tiles.dart';
-import 'package:mistral_ai_chat_example_app/app/router.dart';
+import 'package:flutter_ai_examples/app/home_tiles.dart';
+import 'package:flutter_ai_examples/app/router.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

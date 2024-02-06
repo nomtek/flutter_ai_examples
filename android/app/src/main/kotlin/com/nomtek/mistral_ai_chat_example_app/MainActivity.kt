@@ -1,4 +1,4 @@
-package com.example.mistral_ai_chat_example_app
+package com.nomtek.flutter_ai_examples
 
 import io.flutter.embedding.android.FlutterActivity
 

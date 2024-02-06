@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mistral_ai_chat_example_app/app/app.dart';
+import 'package:flutter_ai_examples/app/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {

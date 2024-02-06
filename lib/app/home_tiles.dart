@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:mistral_ai_chat_example_app/app/router.dart';
+import 'package:flutter_ai_examples/app/router.dart';
 
 class LllAsControllerTile extends StatelessWidget {
   const LllAsControllerTile({

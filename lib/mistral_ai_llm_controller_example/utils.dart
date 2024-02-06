@@ -1,7 +1,7 @@
 import 'dart:core';
 import 'dart:ui';
 
-import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/model.dart';
+import 'package:flutter_ai_examples/mistral_ai_llm_controller_example/model.dart';
 
 String? extractJson(String input) {
   final regExp = RegExp(r'\{[^}]*\}');

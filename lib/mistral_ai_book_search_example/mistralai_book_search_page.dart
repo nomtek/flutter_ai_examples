@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/book_search.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/models.dart';
-import 'package:mistral_ai_chat_example_app/mistral_tokenizer/mistral_tokenizer.dart';
+import 'package:flutter_ai_examples/mistral_ai_book_search_example/book_search.dart';
+import 'package:flutter_ai_examples/mistral_ai_book_search_example/models.dart';
+import 'package:flutter_ai_examples/mistral_tokenizer/mistral_tokenizer.dart';
 import 'package:provider/provider.dart';
 
 class MistralAIBookSearchPage extends StatelessWidget {
