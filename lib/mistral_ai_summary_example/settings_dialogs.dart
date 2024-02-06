@@ -218,7 +218,7 @@ class BaseSettingsDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: SizedBox(
-        width: 312,
+        width: 312, // 312 is the width of the dialog in the design
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
