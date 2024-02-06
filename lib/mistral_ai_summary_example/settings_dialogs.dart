@@ -87,11 +87,8 @@ class _MaxTokensDialogState extends State<MaxTokensDialog> {
       description: 'Write a number if you want to set a max of tokens',
       hintText: 'e.g. 300',
       controller: _maxTokensController,
-      onSettingChanged: () {
-        final maxTokens = _maxTokensController.text.isEmpty
-            ? null
-            : int.tryParse(_maxTokensController.text);
-        context.read<SummarySettingsModel>().setMaxTokens(maxTokens);
+      onSettingChanged: (value) {
+        context.read<SummarySettingsModel>().setMaxTokens(value);
         Navigator.of(context).pop();
       },
       onInputChanged: (value) => setState(() {}),
@@ -133,11 +130,8 @@ class _RandomSeedDialogState extends State<RandomSeedDialog> {
       description: 'Write a number if you want to set a random seed',
       hintText: 'e.g. 123',
       controller: _randomSeedController,
-      onSettingChanged: () {
-        final randomSeed = _randomSeedController.text.isEmpty
-            ? null
-            : int.tryParse(_randomSeedController.text);
-        context.read<SummarySettingsModel>().setRandomSeed(randomSeed);
+      onSettingChanged: (value) {
+        context.read<SummarySettingsModel>().setRandomSeed(value);
         Navigator.of(context).pop();
       },
       onInputChanged: (value) => setState(() {}),
@@ -162,7 +156,7 @@ class BaseNumberInputDialog extends StatelessWidget {
   final String description;
   final String hintText;
   final TextEditingController controller;
-  final VoidCallback onSettingChanged;
+  final void Function(int?) onSettingChanged;
   final void Function(String?) onInputChanged;
   final VoidCallback onClear;
 
@@ -171,7 +165,11 @@ class BaseNumberInputDialog extends StatelessWidget {
     return BaseSettingsDialog(
       title: title,
       description: description,
-      onSettingChanged: onSettingChanged,
+      onSettingChanged: () {
+        final value =
+            controller.text.isEmpty ? null : int.tryParse(controller.text);
+        onSettingChanged(value);
+      },
       child: Column(
         children: [
           const SizedBox(height: 24),
