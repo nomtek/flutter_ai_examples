@@ -14,10 +14,7 @@ class SettingsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DarkerBackgroundTheme(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Settings'),
-          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-        ),
+        appBar: AppBar(title: const Text('Settings')),
         body: Column(
           children: [
             Expanded(
