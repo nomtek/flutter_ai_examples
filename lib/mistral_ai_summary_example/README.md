@@ -10,7 +10,7 @@ This example showcase how to use [mistral_ai_client_dart](https://pub.dev/packag
 
 ## Demo
 
-TBD after UI/UX improvements
+[![Demo](../../docs/assets/text_summary_example_demo.gif)](../../docs/assets/text_summary_example_demo.gif)
 
 ## Prompt and AI chat construction
 
