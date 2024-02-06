@@ -108,6 +108,8 @@ class DarkerBackgroundTheme extends StatelessWidget {
         // change the background color to a darker color for all widgets
         // using this color
         background: baseTheme.colorScheme.surfaceVariant,
+        //change the surface tint for alert dialogs
+        surfaceTint: baseTheme.colorScheme.surfaceVariant,
       ),
       textTheme: baseTheme.textTheme,
     ).copyWith(

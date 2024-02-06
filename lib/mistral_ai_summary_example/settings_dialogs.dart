@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:mistral_ai_chat_example_app/app/theme.dart';
 import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/settings_model.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +36,6 @@ class _ModelSettingsDialogState extends State<ModelSettingsDialog> {
         children: MistralAIModel.values
             .map(
               (model) => RadioListTile<MistralAIModel>(
-                tileColor: Theme.of(context).colorScheme.surfaceVariant,
                 title: Text(
                   model.name,
                   maxLines: 1,
@@ -215,40 +215,48 @@ class BaseSettingsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      surfaceTintColor: Theme.of(context).colorScheme.surfaceVariant,
-      content: SizedBox(
-        width: 312, // 312 is the width of the dialog in the design
-        child: Padding(
-          padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.bodyLarge,
+    return DarkerBackgroundTheme(
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          listTileTheme: Theme.of(context).listTileTheme.copyWith(
+                tileColor: Theme.of(context).colorScheme.surfaceVariant,
               ),
-              const SizedBox(height: 8),
-              Text(
-                description,
-                style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        child: AlertDialog(
+          content: SizedBox(
+            width: 312, // 312 is the width of the dialog in the design
+            child: Padding(
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    description,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  child,
+                ],
               ),
-              child,
-            ],
+            ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: onSettingChanged,
+              child: const Text('Apply'),
+            ),
+          ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: onSettingChanged,
-          child: const Text('Apply'),
-        ),
-      ],
     );
   }
 }

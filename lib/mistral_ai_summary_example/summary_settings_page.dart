@@ -205,19 +205,16 @@ class SafePromptSettingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingValue =
         context.watch<SummarySettingsModel>().settings.safePrompt;
-    return ColoredBox(
-      color: Theme.of(context).colorScheme.surface,
-      child: SwitchListTile(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 29,
-          vertical: 10,
-        ),
-        title: Text('Safe prompt: $settingValue '),
-        value: settingValue,
-        onChanged: (value) {
-          context.read<SummarySettingsModel>().setSafePrompt(safePrompt: value);
-        },
+    return SwitchListTile(
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 29,
+        vertical: 10,
       ),
+      title: Text('Safe prompt: $settingValue '),
+      value: settingValue,
+      onChanged: (value) {
+        context.read<SummarySettingsModel>().setSafePrompt(safePrompt: value);
+      },
     );
   }
 }
