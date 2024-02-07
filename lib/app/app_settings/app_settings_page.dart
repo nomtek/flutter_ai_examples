@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ai_examples/app/app_settings/app_settings.dart';
+import 'package:flutter_ai_examples/app/theme.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:mistral_ai_chat_example_app/app/app_settings/app_settings.dart';
-import 'package:mistral_ai_chat_example_app/app/theme.dart';
 import 'package:provider/provider.dart';
 
 class AppSettingsPage extends StatelessWidget {

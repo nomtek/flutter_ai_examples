@@ -1,6 +1,6 @@
 {
-    "name": "mistral_ai_chat_example_app",
-    "short_name": "mistral_ai_chat_example_app",
+    "name": "flutter_ai_examples",
+    "short_name": "flutter_ai_examples",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

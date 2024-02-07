@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mistral_ai_chat_example_app/app/app_settings/app_settings.dart';
-import 'package:mistral_ai_chat_example_app/app/router.dart';
-import 'package:mistral_ai_chat_example_app/app/theme.dart';
+import 'package:flutter_ai_examples/app/app_settings/app_settings.dart';
+import 'package:flutter_ai_examples/app/router.dart';
+import 'package:flutter_ai_examples/app/theme.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:label="mistral_ai_chat_example_app"
+        android:label="flutter_ai_examples"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

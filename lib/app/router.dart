@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ai_examples/app/app_settings/app_settings_page.dart';
+import 'package:flutter_ai_examples/app/home_page.dart';
+import 'package:flutter_ai_examples/mistral_ai_book_search_example/mistralai_book_search_page.dart';
+import 'package:flutter_ai_examples/mistral_ai_chat_example/mistralai_chat_page.dart';
+import 'package:flutter_ai_examples/mistral_ai_llm_controller_example/mistral_ai_llm_controller_page.dart';
+import 'package:flutter_ai_examples/mistral_ai_summary_example/mistralai_summary_page.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mistral_ai_chat_example_app/app/app_settings/app_settings_page.dart';
-import 'package:mistral_ai_chat_example_app/app/home_page.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_book_search_example/mistralai_book_search_page.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_chat_example/mistralai_chat_page.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_llm_controller_example/mistral_ai_llm_controller_page.dart';
-import 'package:mistral_ai_chat_example_app/mistral_ai_summary_example/mistralai_summary_page.dart';
 
 part 'router.g.dart';
 

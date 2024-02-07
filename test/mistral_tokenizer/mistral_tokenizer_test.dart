@@ -1,4 +1,4 @@
-import 'package:mistral_ai_chat_example_app/mistral_tokenizer/mistral_tokenizer.dart';
+import 'package:flutter_ai_examples/mistral_tokenizer/mistral_tokenizer.dart';
 import 'package:test/test.dart';
 
 void main() {
