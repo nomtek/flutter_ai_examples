@@ -13,7 +13,7 @@ Features:
 
 ## Demo
 
-gif or mp4, TBD after UI/UX
+[![Demo](../../docs/assets/llm_controller_example_demo.gif)](../../docs/assets/llm_controller_example_demo.gif)
 
 ## Prompt and AI chat construction
 
