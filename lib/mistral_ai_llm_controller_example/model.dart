@@ -46,6 +46,7 @@ sealed class ControllerFunction {
   });
 
   factory ControllerFunction.fromName(String name) => switch (name) {
+        SetTemperatureFunction.signature => const SetTemperatureFunction(),
         SetVolumeFunction.signature => const SetVolumeFunction(),
         SetColorOfLightFunction.signature => const SetColorOfLightFunction(),
         TurnOnTVFunction.signature => const TurnOnTVFunction(),
