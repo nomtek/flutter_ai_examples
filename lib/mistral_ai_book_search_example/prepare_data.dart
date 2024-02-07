@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:langchain/langchain.dart';
 import 'package:flutter_ai_examples/mistral_ai_book_search_example/models.dart';
 import 'package:flutter_ai_examples/mistral_tokenizer/mistral_tokenizer.dart';
+import 'package:langchain/langchain.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 
 // tokenizer and client are here to be sure the script

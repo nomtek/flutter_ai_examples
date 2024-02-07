@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:flutter_ai_examples/app/theme.dart';
 import 'package:flutter_ai_examples/mistral_ai_summary_example/settings_model.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
 class ModelSettingsDialog extends StatefulWidget {
