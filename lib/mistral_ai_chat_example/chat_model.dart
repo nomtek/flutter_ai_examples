@@ -112,8 +112,9 @@ class _ChatModel extends ChangeNotifier {
   }
 
   void _handleError(dynamic error) {
-    debugPrint('Error: $error');
-    _setError('Something went wrong. Please try again.');
+    final errorText = error.toString();
+    debugPrint('Error: $errorText');
+    _setError(getNiceErrorMessage(error));
   }
 
   void _generationDone() {
