@@ -1,8 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_examples/app/app_settings/app_settings.dart';
 import 'package:flutter_ai_examples/app/home_tiles.dart';
 import 'package:flutter_ai_examples/app/router.dart';
+import 'package:flutter_ai_examples/utils/snackbar_extension.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -41,22 +44,70 @@ class MistralAIExamples extends StatelessWidget {
       children: [
         const HomeSectionTitle(sectionTitle: 'Mistral AI Examples'),
         const SizedBox(height: 16),
-        if (isMistralSetUp) const MistralExampleTilesGrid(),
-        if (!isMistralSetUp)
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Please set up the Mistral AI API key in the app settings.',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
+        if (!isMistralSetUp) const MistralSetupNotFinished(),
+        const SizedBox(height: 16),
+        MistralExampleTilesGrid(isEnabled: isMistralSetUp),
       ],
     );
   }
 }
 
+class MistralSetupNotFinished extends StatelessWidget {
+  const MistralSetupNotFinished({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.red[100],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          Text.rich(
+            textAlign: TextAlign.center,
+            TextSpan(
+              text: 'Please setup Mistral AI API key.\n'
+                  'Without it, the examples will not work. \n'
+                  'You can get the API key from the ',
+              children: [
+                TextSpan(
+                  text: 'Mistral AI website.',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Theme.of(context).primaryColor,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () async {
+                      final url = Uri.parse('https://console.mistral.ai/');
+                      if (!await launchUrl(url)) {
+                        if (!context.mounted) return;
+                        context.showMessageSnackBar('Could not launch $url');
+                      }
+                    },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () => const AppSettingsRoute().go(context),
+            child: const Text('Go to App Settings'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class MistralExampleTilesGrid extends StatelessWidget {
-  const MistralExampleTilesGrid({super.key});
+  const MistralExampleTilesGrid({required this.isEnabled, super.key});
+
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -74,11 +125,11 @@ class MistralExampleTilesGrid extends StatelessWidget {
       crossAxisCount: columnSize,
       shrinkWrap: true,
       childAspectRatio: 1.75,
-      children: const <Widget>[
-        ChatExampleTile(),
-        TextSummaryTile(),
-        LllAsControllerTile(),
-        BookSearchTile(),
+      children: <Widget>[
+        ChatExampleTile(isEnabled: isEnabled),
+        TextSummaryTile(isEnabled: isEnabled),
+        LllAsControllerTile(isEnabled: isEnabled),
+        BookSearchTile(isEnabled: isEnabled),
       ],
     );
   }
