@@ -43,6 +43,12 @@ class AppSettingsData {
 
   final String mistralApiKey;
 
+  // for now check if the API key is not empty
+  bool isMistralApiKeyValid() {
+    final isNotBlank = mistralApiKey.trim().isNotEmpty;
+    return isNotBlank;
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

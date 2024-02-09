@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ai_examples/app/app_settings/app_settings.dart';
 import 'package:flutter_ai_examples/app/home_tiles.dart';
 import 'package:flutter_ai_examples/app/router.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -18,16 +20,39 @@ class HomePage extends StatelessWidget {
         body: const SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                HomeSectionTitle(sectionTitle: 'Mistral AI Examples'),
-                SizedBox(height: 16),
-                MistralExampleTilesGrid(),
-              ],
-            ),
+            child: MistralAIExamples(),
           ),
         ),
       );
+}
+
+class MistralAIExamples extends StatelessWidget {
+  const MistralAIExamples({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isMistralSetUp = context.select<AppSettings, bool>(
+      (appSettings) => appSettings.value.isMistralApiKeyValid(),
+    );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const HomeSectionTitle(sectionTitle: 'Mistral AI Examples'),
+        const SizedBox(height: 16),
+        if (isMistralSetUp) const MistralExampleTilesGrid(),
+        if (!isMistralSetUp)
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Please set up the Mistral AI API key in the app settings.',
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+      ],
+    );
+  }
 }
 
 class MistralExampleTilesGrid extends StatelessWidget {
