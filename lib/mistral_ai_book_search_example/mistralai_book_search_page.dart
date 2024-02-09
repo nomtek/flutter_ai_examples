@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ai_examples/mistral_ai_book_search_example/book_search.dart';
 import 'package:flutter_ai_examples/mistral_ai_book_search_example/models.dart';
 import 'package:flutter_ai_examples/mistral_tokenizer/mistral_tokenizer.dart';
+import 'package:flutter_ai_examples/utils/error_message.dart';
 import 'package:flutter_ai_examples/utils/snackbar_extension.dart';
 import 'package:provider/provider.dart';
 
@@ -180,10 +181,7 @@ class _SearchFormState extends State<SearchForm> {
           isSearching = false;
         });
 
-        context.showMessageSnackBar(
-          'There was a problem when trying to search for answer. '
-          'Please try again.',
-        );
+        context.showMessageSnackBar(getNiceErrorMessage(error));
       },
     );
   }
