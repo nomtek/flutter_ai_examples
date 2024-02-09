@@ -21,6 +21,7 @@ dependencies:
   mistralai_client_dart: 0.0.2
   provider: ^6.1.1
   shared_preferences: ^2.2.2
+  url_launcher: ^6.2.4
   
 dev_dependencies:
   build_runner: ^2.4.8

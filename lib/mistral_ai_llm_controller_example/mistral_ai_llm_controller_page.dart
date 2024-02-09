@@ -6,6 +6,7 @@ import 'package:flutter_ai_examples/mistral_ai_llm_controller_example/logger_dia
 import 'package:flutter_ai_examples/mistral_ai_llm_controller_example/model.dart';
 import 'package:flutter_ai_examples/mistral_ai_llm_controller_example/prompt.dart';
 import 'package:flutter_ai_examples/mistral_ai_llm_controller_example/utils.dart';
+import 'package:flutter_ai_examples/utils/error_message.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 import 'package:provider/provider.dart';
 
@@ -124,7 +125,9 @@ class _MistralAiLlmControllerPageState
       );
       _mapCommandResponseToUi(commandResult);
     } catch (e) {
-      setState(() => errorMessage = e.toString());
+      setState(() => errorMessage = getNiceErrorMessage(e));
+    } finally {
+      setState(() => showLoading = false);
     }
   }
 
@@ -286,11 +289,15 @@ class LlmControllerErrorTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 300),
+      );
+    });
     return ListTile(
-      title: Text(
-        'Error message: $errorMessage',
-        style: const TextStyle(color: Colors.red),
-      ),
+      titleTextStyle: const TextStyle(color: Colors.red),
+      title: Text(errorMessage),
     );
   }
 }

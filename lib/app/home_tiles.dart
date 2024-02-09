@@ -4,8 +4,11 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class LllAsControllerTile extends StatelessWidget {
   const LllAsControllerTile({
+    required this.isEnabled,
     super.key,
   });
+
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +19,7 @@ class LllAsControllerTile extends StatelessWidget {
         Colors.red,
         Colors.orangeAccent,
       ],
+      isEnabled: isEnabled,
       onTap: () => const MistralAILlmControllerRoute().go(context),
     );
   }
@@ -23,8 +27,11 @@ class LllAsControllerTile extends StatelessWidget {
 
 class TextSummaryTile extends StatelessWidget {
   const TextSummaryTile({
+    required this.isEnabled,
     super.key,
   });
+
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +42,7 @@ class TextSummaryTile extends StatelessWidget {
         Colors.green,
         Colors.yellow,
       ],
+      isEnabled: isEnabled,
       onTap: () => const MistralAISummaryRoute().go(context),
     );
   }
@@ -42,8 +50,11 @@ class TextSummaryTile extends StatelessWidget {
 
 class ChatExampleTile extends StatelessWidget {
   const ChatExampleTile({
+    required this.isEnabled,
     super.key,
   });
+
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +65,19 @@ class ChatExampleTile extends StatelessWidget {
         Colors.blue[800]!,
         Colors.blue[400]!,
       ],
-      onTap: () => const MistralAIChatRoute().go(context),
+      isEnabled: isEnabled,
+      onTap: isEnabled ? () => const MistralAIChatRoute().go(context) : null,
     );
   }
 }
 
 class BookSearchTile extends StatelessWidget {
   const BookSearchTile({
+    required this.isEnabled,
     super.key,
   });
+
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +88,7 @@ class BookSearchTile extends StatelessWidget {
         Colors.purple,
         Colors.pinkAccent,
       ],
+      isEnabled: isEnabled,
       onTap: () => const MistralAIBookSearchRoute().go(context),
     );
   }
@@ -106,6 +122,8 @@ class HomeExampleTile extends StatelessWidget {
     required this.icon,
     required this.onTap,
     required this.gradientColors,
+    this.disabledGradientColors = const [Colors.grey, Colors.black54],
+    this.isEnabled = true,
     super.key,
   }) : assert(
           gradientColors.length == 2,
@@ -114,43 +132,48 @@ class HomeExampleTile extends StatelessWidget {
 
   final String title;
   final IconData icon;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final List<Color> gradientColors;
+  final List<Color> disabledGradientColors;
+  final bool isEnabled;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: isEnabled ? onTap : null,
       borderRadius: BorderRadius.circular(8),
-      child: Ink(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          gradient: LinearGradient(
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-            colors: gradientColors,
-            stops: const [0.2806, 0.984],
+      child: Opacity(
+        opacity: isEnabled ? 1 : 0.7,
+        child: Ink(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: isEnabled ? gradientColors : disabledGradientColors,
+              stops: const [0.2806, 0.984],
+            ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Icon(
-              icon,
-              color: Colors.white,
-              size: 32,
-            ),
-            const SizedBox(height: 16),
-            Flexible(
-              child: Text(
-                title,
-                style: const TextStyle(color: Colors.white),
-                overflow: TextOverflow.ellipsis,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(
+                icon,
+                color: Colors.white,
+                size: 32,
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              Flexible(
+                child: Text(
+                  title,
+                  style: const TextStyle(color: Colors.white),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -38,6 +38,7 @@ class _ChatModel extends ChangeNotifier {
       return;
     }
     _isGenerationInProgress = true;
+    error = null;
     _chatHistory.addLast(item);
     // notify ui about added user's message and updating loading state
     notifyListeners();
@@ -111,8 +112,9 @@ class _ChatModel extends ChangeNotifier {
   }
 
   void _handleError(dynamic error) {
-    debugPrint('Error: $error');
-    _setError('Something went wrong. Please try again.');
+    final errorText = error.toString();
+    debugPrint('Error: $errorText');
+    _setError(getNiceErrorMessage(error));
   }
 
   void _generationDone() {
@@ -125,8 +127,6 @@ class _ChatModel extends ChangeNotifier {
   void _setError(String error) {
     this.error = error;
     notifyListeners();
-    // clear it to not show it again on rebuild
-    this.error = null;
   }
 
   @override

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ai_examples/mistral_ai_book_search_example/book_search.dart';
 import 'package:flutter_ai_examples/mistral_ai_book_search_example/models.dart';
 import 'package:flutter_ai_examples/mistral_tokenizer/mistral_tokenizer.dart';
+import 'package:flutter_ai_examples/utils/error_message.dart';
+import 'package:flutter_ai_examples/utils/snackbar_extension.dart';
 import 'package:provider/provider.dart';
 
 class MistralAIBookSearchPage extends StatelessWidget {
@@ -108,7 +110,7 @@ class _SearchFormState extends State<SearchForm> {
               hintText: 'Ask question about book...',
               prefixIcon: Icon(Icons.search),
             ),
-            onSubmitted: search,
+            onSubmitted: (value) => search(context, value),
           ),
         ),
         const SizedBox(height: 16),
@@ -155,7 +157,7 @@ class _SearchFormState extends State<SearchForm> {
     );
   }
 
-  void search(String question) {
+  void search(BuildContext context, String question) {
     debugPrint('Searching for $question');
     setState(() {
       result = null;
@@ -178,6 +180,8 @@ class _SearchFormState extends State<SearchForm> {
         setState(() {
           isSearching = false;
         });
+
+        context.showMessageSnackBar(getNiceErrorMessage(error));
       },
     );
   }

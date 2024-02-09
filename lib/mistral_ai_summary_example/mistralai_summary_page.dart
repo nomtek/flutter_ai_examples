@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_ai_examples/mistral_ai_summary_example/settings_model.dart';
 import 'package:flutter_ai_examples/mistral_ai_summary_example/summary_settings_page.dart';
 import 'package:flutter_ai_examples/mistral_ai_summary_example/utils.dart';
+import 'package:flutter_ai_examples/utils/error_message.dart';
+import 'package:flutter_ai_examples/utils/snackbar_extension.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
 import 'package:provider/provider.dart';
 
@@ -25,9 +27,12 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
     super.dispose();
   }
 
-  Future<void> summarizeText(String text, SummarySettings settings) async {
+  Future<void> summarizeText(
+    BuildContext context,
+    String text,
+    SummarySettings settings,
+  ) async {
     setState(() => summaryInProgress = true);
-
     try {
       final response = await context.read<MistralAIClient>().chat(
             ChatParams(
@@ -49,13 +54,11 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
         summaryResult = response.choices.first.message.content;
       });
     } catch (e) {
-      setState(() {
-        summaryResult = 'Error: $e';
-      });
+      debugPrint('$e');
+      if (!context.mounted) return;
+      context.showMessageSnackBar(getNiceErrorMessage(e));
     } finally {
-      setState(() {
-        summaryInProgress = false;
-      });
+      setState(() => summaryInProgress = false);
     }
   }
 
@@ -82,6 +85,7 @@ class _MistralAISummaryPageState extends State<MistralAISummaryPage> {
                   const SizedBox(height: 20),
                   SummaryActions(
                     onSummarize: () => summarizeText(
+                      context,
                       summaryInputController.text,
                       context.read<SummarySettingsModel>().settings,
                     ),
