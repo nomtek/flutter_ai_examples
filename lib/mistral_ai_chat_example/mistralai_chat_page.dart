@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mistralai_client_dart/mistralai_client_dart.dart';
@@ -136,12 +137,14 @@ class _ChatMessageInputState extends State<_ChatMessageInput> {
     final showLoading = context.select(
       (_ChatModel model) => model.waitingForResponse,
     );
+    final error = context.select((_ChatModel model) => model.error);
     return TextField(
       focusNode: focusNode,
       textInputAction: TextInputAction.send,
       controller: messageController,
       decoration: InputDecoration(
         hintText: 'Type your message here...',
+        errorText: error,
         suffixIcon: showLoading
             ? const _TextFieldProgressIndicator()
             : IconButton(
