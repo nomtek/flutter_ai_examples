@@ -11,6 +11,14 @@ Examples using [Mistral AI API](https://docs.mistral.ai/) through the [MistralAI
 - [Book search](lib/mistral_ai_book_search_example/README.md)
 - [LLM as a controller](lib/mistral_ai_llm_controller_example/README.md)
 
+### Interactive Demo
+
+Experience the capabilities of our AI examples live with our interactive demo. This demo allows you to explore the functionality of each example in real time through a web-based interface.
+
+[Launch Interactive Demo](https://flutter-ai-examples.web.app/)
+
+To access the interactive demo, a Mistral AI API key is necessary. If you haven't acquired one yet, please [sign up for a Mistral AI account](https://mistral.ai/) and obtain your API key.
+
 ## Getting Started
 
 ### Install dependencies
